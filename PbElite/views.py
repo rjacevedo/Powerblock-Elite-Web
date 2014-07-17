@@ -11,6 +11,6 @@ def test_response(request):
         return HttpResponse(html)
     else:
         response_data = {}
-        response_data['result'] = "It worked omg!"
+        response_data['result'] = 1;
 
         return HttpResponse(json.dumps(response_data), content_type="application/json")
