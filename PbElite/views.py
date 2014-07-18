@@ -4,7 +4,7 @@ import datetime
 import json
 
 @csrf_exempt
-def test_response(request):
+def sendPD(request):
     if request.method == 'GET':
         now = datetime.datetime.now()
         html = "<html><body>It is now %s.</body></html>" % now
