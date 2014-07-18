@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     # url(r'^$', 'PbElite.views.home', name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^testing/$', 'PbElite.views.test_response'),
+    url(r'^testing/(?P<value>\d+)/$', 'PbElite.views.test_response'),                   
 )
