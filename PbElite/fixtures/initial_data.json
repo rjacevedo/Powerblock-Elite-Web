@@ -1,0 +1,145 @@
+[
+	{
+		"model": "PbElite.Login",
+		"pk": 1,
+		"fields": {
+			"username": "javier",
+			"password": "javier1",
+			"salt": "saltyjavier"
+		}
+	},
+	{
+		"model": "PbElite.Login",
+		"pk": 2,
+		"fields": {
+			"username": "raul",
+			"password": "raul1",
+			"salt": "saltyraul"
+		}
+	},
+	{
+		"model": "PbElite.Login",
+		"pk": 3,
+		"fields": {
+			"username": "andy",
+			"password": "andy1",
+			"salt": "saltyandy"
+		}
+	},
+
+	{
+		"model": "PbElite.User",
+		"pk": 1,
+		"fields": {
+			"username": 1,
+			"first_name": "javier",
+			"last_name": "ching",
+			"email": "javier@waterloo.ca"
+		}
+	},
+	{
+		"model": "PbElite.User",
+		"pk": 2,
+		"fields": {
+			"username": 2,
+			"first_name": "raul",
+			"last_name": "acevedo",
+			"email": "raul@waterloo.ca"
+		}
+	},
+	{
+		"model": "PbElite.User",
+		"pk": 3,
+		"fields": {
+			"username": 3,
+			"first_name": "andy",
+			"last_name": "zhang",
+			"email": "andy@waterloo.ca"
+		}
+	},
+
+	{
+		"model": "PbElite.RaspberryPi",
+		"pk": 1,
+		"fields": {
+			"serial_num": "rpijavier",
+			"username": 1,
+			"model": "rpi",
+			"street_num": "303",
+			"street_name": "Westcourt",
+			"city": "Waterloo",
+			"country": "Canada",
+			"postal_code": "N2L1J1"
+		}
+	},
+	{
+		"model": "PbElite.RaspberryPi",
+		"pk": 2,
+		"fields": {
+			"serial_num": "rpiraul",
+			"username": 2,
+			"model": "rpi",
+			"street_num": "303",
+			"street_name": "Westcourt",
+			"city": "Waterloo",
+			"country": "Canada",
+			"postal_code": "N2L1J1"
+		}
+	},
+	{
+		"model": "PbElite.RaspberryPi",
+		"pk": 3,
+		"fields": {
+			"serial_num": "rpiandy",
+			"username": 3,
+			"model": "rpi",
+			"street_num": "123",
+			"street_name": "Lester",
+			"city": "Waterloo",
+			"country": "Canada",
+			"postal_code": "N2L1A1"
+		}
+	},
+
+	{
+		"model": "PbElite.Circuit",
+		"pk": 1,
+		"fields": {
+			"circuit_num": "1",
+			"serial_num": 1,
+			"circuit_name": "javier's room",
+			"state": 1
+		}
+	},
+	{
+		"model": "PbElite.Circuit",
+		"pk": 2,
+		"fields": {
+			"circuit_num": "1",
+			"serial_num": 2,
+			"circuit_name": "raul's room",
+			"state": 1
+		}
+	},
+	{
+		"model": "PbElite.Circuit",
+		"pk": 3,
+		"fields": {
+			"circuit_num": "1",
+			"serial_num": 3,
+			"circuit_name": "andy's room",
+			"state": 1
+		}
+	},
+
+	{
+		"model": "PbElite.Reading",
+		"pk": 1,
+		"fields": {
+			"circuit_num": 1,
+			"voltage": 12.0,
+			"current": 5.2,
+			"datetime": "2014-07-18T21:20:30-05:00"
+		}
+	}
+]
