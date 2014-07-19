@@ -8,14 +8,14 @@ class Login(models.Model):
     salt = models.CharField(max_length=512)
 
 class User(models.Model):
-    username = models.OneToOneField(Login)
+    login = models.OneToOneField(Login)
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     email = models.CharField(max_length=128)
 
 class RaspberryPi(models.Model):
     serial_num = models.CharField(unique=True, max_length=64)
-    username = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     model = models.CharField(max_length=128)
     street_num = models.IntegerField()
     street_name = models.CharField(max_length=64)
@@ -25,15 +25,15 @@ class RaspberryPi(models.Model):
 
 class Circuit(models.Model):
     circuit_num = models.IntegerField()
-    serial_num = models.ForeignKey(RaspberryPi)
+    raspberry_pi = models.ForeignKey(RaspberryPi)
     circuit_name = models.CharField(max_length=64)
-    state = models.BinaryField();
+    state = models.BooleanField();
 
 class Reading(models.Model):
-    circuit_num = models.ForeignKey(Circuit)
+    circuit = models.ForeignKey(Circuit)
     voltage = models.FloatField()
     current = models.FloatField()
-    datetime = models.DateTimeField(default=datetime.datetime.now)
+    timestamp = models.DateTimeField(default=datetime.datetime.now)
 
 
 

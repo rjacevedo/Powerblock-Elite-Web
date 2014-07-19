@@ -3,4 +3,8 @@ MySQL-python==1.2.5
 South==1.0
 argparse==1.2.1
 djangorestframework==2.3.14
+django-nose==1.2
+factory-boy==2.4.1
+nose==1.3.3
+>>>>>>> af7137e0501897ccafdb55349a0e8b9ec392e932
 wsgiref==0.1.2
