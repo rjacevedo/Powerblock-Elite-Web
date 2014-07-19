@@ -8,13 +8,17 @@
 			}else{ 
 				ele.value = "0"; 
 			}
-			
+
+			console.log("presssed");
 			$.ajax({
-				type: "POST",
-				url: "127.0.0.1:8000/testing/",
-				success: function(json){
-					console.log(json);
-				}
+			    type: "POST",
+			    url: "/testing/" + ele.value + "/",
+			    success: function (json) {
+			        console.log(json);
+			    },
+			    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("error: " + errorThrown);
+			    }
 			});
 		} 
 	</script> 
