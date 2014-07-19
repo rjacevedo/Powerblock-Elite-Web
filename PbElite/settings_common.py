@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import mydb
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -40,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'PbElite',
     'south',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -55,7 +55,19 @@ ROOT_URLCONF = 'PbElite.urls'
 
 WSGI_APPLICATION = 'PbElite.wsgi.application'
 
+# Rest Framework Settings
+REST_FRAMEWORK = {
+    # Use hyperlinked styles by default.
+    # Only used if the `serializer_class` attribute is not set on a view.
+    'DEFAULT_MODEL_SERIALIZER_CLASS':
+        'rest_framework.serializers.HyperlinkedModelSerializer',
 
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 

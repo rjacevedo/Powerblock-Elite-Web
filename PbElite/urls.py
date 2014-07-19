@@ -10,4 +10,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^testing/$', 'PbElite.views.sendPD'),
     url(r'^testing/(?P<value>\d+)/$', 'PbElite.views.sendPD'),                   
+    url(r'^api/', include('rest_framework.urls', namespace='rest_framework'))
 )
