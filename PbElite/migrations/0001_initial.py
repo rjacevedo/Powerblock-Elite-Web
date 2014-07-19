@@ -20,7 +20,7 @@ class Migration(SchemaMigration):
         # Adding model 'User'
         db.create_table(u'PbElite_user', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('username', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['PbElite.Login'], unique=True)),
+            ('login', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['PbElite.Login'], unique=True)),
             ('first_name', self.gf('django.db.models.fields.CharField')(max_length=32)),
             ('last_name', self.gf('django.db.models.fields.CharField')(max_length=32)),
             ('email', self.gf('django.db.models.fields.CharField')(max_length=128)),
@@ -31,7 +31,7 @@ class Migration(SchemaMigration):
         db.create_table(u'PbElite_raspberrypi', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('serial_num', self.gf('django.db.models.fields.CharField')(unique=True, max_length=64)),
-            ('username', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['PbElite.User'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['PbElite.User'])),
             ('model', self.gf('django.db.models.fields.CharField')(max_length=128)),
             ('street_num', self.gf('django.db.models.fields.IntegerField')()),
             ('street_name', self.gf('django.db.models.fields.CharField')(max_length=64)),
@@ -45,19 +45,19 @@ class Migration(SchemaMigration):
         db.create_table(u'PbElite_circuit', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('circuit_num', self.gf('django.db.models.fields.IntegerField')()),
-            ('serial_num', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['PbElite.RaspberryPi'])),
+            ('raspberry_pi', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['PbElite.RaspberryPi'])),
             ('circuit_name', self.gf('django.db.models.fields.CharField')(max_length=64)),
-            ('state', self.gf('django.db.models.fields.BinaryField')()),
+            ('state', self.gf('django.db.models.fields.BooleanField')()),
         ))
         db.send_create_signal(u'PbElite', ['Circuit'])
 
         # Adding model 'Reading'
         db.create_table(u'PbElite_reading', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('circuit_num', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['PbElite.Circuit'])),
+            ('circuit', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['PbElite.Circuit'])),
             ('voltage', self.gf('django.db.models.fields.FloatField')()),
             ('current', self.gf('django.db.models.fields.FloatField')()),
-            ('datetime', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('timestamp', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
         ))
         db.send_create_signal(u'PbElite', ['Reading'])
 
@@ -85,8 +85,8 @@ class Migration(SchemaMigration):
             'circuit_name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'circuit_num': ('django.db.models.fields.IntegerField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'serial_num': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['PbElite.RaspberryPi']"}),
-            'state': ('django.db.models.fields.BinaryField', [], {})
+            'raspberry_pi': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['PbElite.RaspberryPi']"}),
+            'state': ('django.db.models.fields.BooleanField', [], {})
         },
         u'PbElite.login': {
             'Meta': {'object_name': 'Login'},
@@ -105,14 +105,14 @@ class Migration(SchemaMigration):
             'serial_num': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '64'}),
             'street_name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'street_num': ('django.db.models.fields.IntegerField', [], {}),
-            'username': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['PbElite.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['PbElite.User']"})
         },
         u'PbElite.reading': {
             'Meta': {'object_name': 'Reading'},
-            'circuit_num': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['PbElite.Circuit']"}),
+            'circuit': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['PbElite.Circuit']"}),
             'current': ('django.db.models.fields.FloatField', [], {}),
-            'datetime': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'voltage': ('django.db.models.fields.FloatField', [], {})
         },
         u'PbElite.user': {
@@ -121,7 +121,7 @@ class Migration(SchemaMigration):
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
-            'username': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['PbElite.Login']", 'unique': 'True'})
+            'login': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['PbElite.Login']", 'unique': 'True'})
         }
     }
 
