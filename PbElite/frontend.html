@@ -1,32 +1,55 @@
 <html> 
-	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script type="text/javascript"> 
-		function changeVal(){ 
-			var ele = document.getElementById("result"); 
-			if(ele.value == "0"){
-				ele.value = "1"; 
-			}else{ 
-				ele.value = "0"; 
-			}
+		function changeVal(circuitNum){
+		    var circuit = document.getElementById('circuit' + circuitNum);
+		    var login = 1;
+		    console.log(circuit.value=="true");
 
-			console.log("presssed");
-			$.ajax({
-			    type: "POST",
-			    url: "/testing/" + ele.value + "/",
-			    success: function (json) {
-			        console.log(json);
-			    },
-			    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    console.log("error: " + errorThrown);
-			    }
-			});
+		    $.ajax({
+		        type: "POST",
+		        url: "/testing/" + login + "/" + circuitNum + "/" + (circuit.value == "true" ? "0" : "1") + "/",
+		        success: function (data) {
+		            console.log(data);
+		            console.log(data['result']);
+
+		            if (data['result'] == "0") {
+		                circuit.value = "false";
+		                document.getElementById("display" + circuitNum).innerHTML = "off"
+		            } else {
+		                circuit.value = "true";
+		                document.getElementById("display" + circuitNum).innerHTML = "on"
+		            }
+		        },
+		        error: function (XMLHttpRequest, textStatus, errorThrown) {
+		            console.log("error: " + errorThrown);
+		        }
+		    });
 		} 
 	</script> 
 	<h1> 
 		Welcome to the Powerblock Elite UI! 
 	</h1> 
-	<body> 
-		<span><button type="submit" onclick="changeVal()">Turn On/Off</button></span> 
-		<span><input type="text" id="result" value="0"></span> 
+	<body>
+        <div id="mainDiv"> 
+            <script type="text/javascript">
+                var html = '';
+
+                var login = 1;
+                $.getJSON("/circuits/" + login + "/", function (circuits) {
+                    var contents = '<table>';
+                    for (i in circuits) {
+                        contents += '<tr>';
+                        contents += '<td><span><input type="hidden" id="circuit' + circuits[i].num + '" value="' + circuits[i].state + '" /></span>';
+                        contents += '<span>'+circuits[i].name+' is currently </span>';
+                        contents += '<span id="display' + circuits[i].num + '">' + (circuits[i].state == true ? "on" : "off") + '</span><td>';
+                        contents += '<td><button type="submit" onclick="changeVal(' + circuits[i].num + ')">Turn On/Off</button><td>';
+                        contents += '</tr>';
+                    }
+                    contents += "</table>";
+                    document.getElementById('mainDiv').innerHTML += contents;
+                });
+            </script>
+        </div>
 	</body> 
 </html>
