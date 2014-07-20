@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import datetime
 import json
+from serializers import ReadingSerializer
 
 @csrf_exempt
 def test_response(request):
@@ -36,3 +37,19 @@ def sendPD(request, value=None):
         response_data['result'] = value;
 
         return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@csrf_exempt
+def getReading(request):
+    print 'here'
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        serial = ReadingSerializer(data=data)
+        print 'ahh'
+        if serial.is_valid():
+            serial.save()
+            print 'anywhere'
+            return HttpResponse(serial.data, status = 200)
+        print 'failed'
+        return HttpResponse(serial.errors,status = 400)
+
+
