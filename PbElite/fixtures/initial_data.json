@@ -107,8 +107,9 @@
 		"fields": {
 			"circuit_num": "1",
 			"raspberry_pi": 1,
-			"circuit_name": "javier's room",
-			"state": true
+			"circuit_name": "javier's living room",
+			"state": true,
+			"changed": false
 		}
 	},
 	{
@@ -118,7 +119,8 @@
 			"circuit_num": "1",
 			"raspberry_pi": 2,
 			"circuit_name": "raul's room",
-			"state": true
+			"state": true,
+			"changed": false
 		}
 	},
 	{
@@ -128,7 +130,19 @@
 			"circuit_num": "1",
 			"raspberry_pi": 3,
 			"circuit_name": "andy's room",
-			"state": true
+			"state": true,
+			"changed": false
+		}
+	},
+	{
+		"model": "PbElite.Circuit",
+		"pk": 4,
+		"fields": {
+			"circuit_num": "2",
+			"raspberry_pi": 1,
+			"circuit_name": "javier's bedroom",
+			"state": true,
+			"changed": false
 		}
 	},
 

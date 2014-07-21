@@ -6,21 +6,46 @@ import json
 from serializers import ReadingSerializer
 
 @csrf_exempt
-def test_response(request):
-    response_data = [
-        {
-            'user_id': "tonyleterrible",
-            'circuit_id': 123,
-            'switch': {'id': 1, 'toggle': 'False'}
-        },
-        {
-            'user_id': "futony",
-            'circuit_id': 145,
-            'switch': {'id': 3, 'toggle': 'True'}
+def test_response(request, login=None):
+    user = User.objects.get(login_id=login)
+    rpi = RaspberryPi.objects.get(user=user.id)
+    circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
+
+    response_data = {
+            'changed': False,
+            'data': []
         }
-    ]
+
+    for circuit in circuits:
+        print(circuit)
+        if(circuit.changed == True):
+            response_data['changed'] = True
+            response_data['data'].append({
+                    'circuit_num': circuit.circuit_num,
+                    'circuit_name': circuit.circuit_name,
+                    'state': circuit.state
+                })
+            circuit.changed = False
+            circuit.save()
+
+    '''response_data = {
+        'changed': True,
+        'user_id': "tonyleterrible",
+        'data': [
+            {
+                'circuit_id': 123,
+                'switch': {'id': 1, 'toggle': 'False'}
+            },
+            {
+                'circuit_id': 145,
+                'switch': {'id': 3, 'toggle': 'True'}
+            }
+        ]
+    }'''
+    
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+@csrf_exempt
 def sendPD(request, login=None, circuitNum=None, value=None):
     if request.method == 'GET':
         
@@ -38,10 +63,12 @@ def sendPD(request, login=None, circuitNum=None, value=None):
         circuit = Circuit.objects.get(raspberry_pi=rpi.id, circuit_num=circuitNum)
 
         circuit.state = True if value=="1" else False
+        circuit.changed = True
         circuit.save()
 
         response_data = {}
         response_data['result'] = value;
+        print(value)
      
         #return HttpResponse(json.dumps(success), content_type="application/json")
         return HttpResponse(json.dumps(response_data), content_type="application/json")

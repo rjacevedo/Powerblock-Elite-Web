@@ -28,6 +28,7 @@ class Circuit(models.Model):
     raspberry_pi = models.ForeignKey(RaspberryPi)
     circuit_name = models.CharField(max_length=64)
     state = models.BooleanField();
+    changed = models.BooleanField(default=0);
 
 class Reading(models.Model):
     circuit = models.ForeignKey(Circuit)
