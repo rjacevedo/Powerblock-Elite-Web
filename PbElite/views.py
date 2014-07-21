@@ -64,15 +64,20 @@ def grabCircuits(request, login=None):
 
 @csrf_exempt
 def getReading(request):
-    print 'here'
     if request.method == 'POST':
-        data = json.loads(request.body)
-        serial = ReadingSerializer(data=data)
-        print 'ahh'
-        if serial.is_valid():
-            serial.save()
-            print 'anywhere'
-            return HttpResponse(serial.data, status = 200)
-        print 'failed'
-        return HttpResponse(serial.errors,status = 400)
+        json_data = json.loads(request.body)
+        print RaspberryPi.objects.all()
+        pi = RaspberryPi.objects.get(serial_num=json_data['serial'])
+        print pi.model
+        if pi != None:
+            for reading in json_data['readings']:
+                reading['circuit'] = Circuit.objects.get(circuit_num=reading['circuit_num'],raspberry_pi=pi).id
+                serial = ReadingSerializer(data=reading)
+                print reading
+                if serial.is_valid():
+                    serial.save()
+                    return HttpResponse("OK", 200)
+                else:
+                    return HttpResponse("Bad Reading", 400)
+        return HttpResponse("Specify RPi Serial Number", 400)
 
