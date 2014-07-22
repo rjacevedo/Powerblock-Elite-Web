@@ -11,4 +11,5 @@ readings.append({'circuit_num':1,'voltage':random.random(),'current':random.rand
 data = json.dumps(data)
 print data
 url = 'http://127.0.0.1:8000/api/sendReading'
-print urllib2.urlopen(url, data)
+a = urllib2.urlopen(url, data)
+print a.read()

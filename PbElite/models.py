@@ -27,12 +27,11 @@ class Circuit(models.Model):
     circuit_num = models.IntegerField()
     raspberry_pi = models.ForeignKey(RaspberryPi)
     circuit_name = models.CharField(max_length=64)
-    state = models.BooleanField();
+    state = models.BooleanField(default=True);
 
 class Reading(models.Model):
     circuit = models.ForeignKey(Circuit)
-    voltage = models.FloatField()
-    current = models.FloatField()
+    power = models.FloatField()
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
 

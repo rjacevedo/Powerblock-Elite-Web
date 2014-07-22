@@ -23,11 +23,11 @@ def test_response(request):
 
 def sendPD(request, login=None, circuitNum=None, value=None):
     if request.method == 'GET':
-        
+
         now = datetime.datetime.now();
 
         file_object = open("PbElite/frontend.html")
-        
+
         html = file_object.readlines()
 
         file_object.close()
@@ -42,7 +42,7 @@ def sendPD(request, login=None, circuitNum=None, value=None):
 
         response_data = {}
         response_data['result'] = value;
-     
+
         #return HttpResponse(json.dumps(success), content_type="application/json")
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -51,9 +51,9 @@ def grabCircuits(request, login=None):
         user = User.objects.get(login_id=login)
         rpi = RaspberryPi.objects.get(user=user.id)
         circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
-        
+
         response_data = []
-        
+
         for circuit in circuits:
             response_data.append({
                     "num": circuit.circuit_num,
@@ -65,19 +65,21 @@ def grabCircuits(request, login=None):
 @csrf_exempt
 def getReading(request):
     if request.method == 'POST':
+        print "hello"
+        print request.body
         json_data = json.loads(request.body)
-        print RaspberryPi.objects.all()
         pi = RaspberryPi.objects.get(serial_num=json_data['serial'])
-        print pi.model
         if pi != None:
             for reading in json_data['readings']:
-                reading['circuit'] = Circuit.objects.get(circuit_num=reading['circuit_num'],raspberry_pi=pi).id
+                temp , useless= Circuit.objects.get_or_create(circuit_num=reading['circuit_num'],raspberry_pi=pi)
+                reading['circuit'] = temp.id
                 serial = ReadingSerializer(data=reading)
-                print reading
                 if serial.is_valid():
+                    print "valid"
                     serial.save()
-                    return HttpResponse("OK", 200)
                 else:
-                    return HttpResponse("Bad Reading", 400)
-        return HttpResponse("Specify RPi Serial Number", 400)
+                    print "invalid"
+                    return HttpResponse(content="Bad Reading")
+            return HttpResponse(content="OK")
+        return HttpResponse(content="Specify RPi Serial Number")
 
