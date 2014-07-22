@@ -6,4 +6,4 @@ import datetime
 class ReadingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reading
-        fields = ('circuit', 'voltage', 'current', 'timestamp')
+        fields = ('circuit', 'power', 'timestamp')

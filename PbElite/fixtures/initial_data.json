@@ -151,8 +151,7 @@
 		"pk": 1,
 		"fields": {
 			"circuit": 1,
-			"voltage": 12.0,
-			"current": 5.2,
+            "power" : 1,
 			"timestamp": "2014-07-18T21:20:30-05:00"
 		}
 	}

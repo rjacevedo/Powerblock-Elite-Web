@@ -44,10 +44,11 @@ def test_response(request, login=None):
     
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+@csrf_exempt
 def grabHomepage(request):
     if(request.method == 'GET'):
         file_object = open("PbElite/frontend.html")
-        
+
         html = file_object.readlines()
 
         file_object.close()
@@ -67,7 +68,6 @@ def updateCircuit(request, login=None, circuitNum=None, value=None):
         response_data = {}
         response_data['result'] = value;
         print(value)
-     
         #return HttpResponse(json.dumps(success), content_type="application/json")
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -76,9 +76,9 @@ def grabCircuits(request, login=None):
         user = User.objects.get(login_id=login)
         rpi = RaspberryPi.objects.get(user=user.id)
         circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
-        
+
         response_data = []
-        
+
         for circuit in circuits:
             response_data.append({
                     "num": circuit.circuit_num,
@@ -91,13 +91,21 @@ def grabCircuits(request, login=None):
 def getReading(request):
     print 'here'
     if request.method == 'POST':
-        data = json.loads(request.body)
-        serial = ReadingSerializer(data=data)
-        print 'ahh'
-        if serial.is_valid():
-            serial.save()
-            print 'anywhere'
-            return HttpResponse(serial.data, status = 200)
-        print 'failed'
-        return HttpResponse(serial.errors,status = 400)
+        print "hello"
+        print request.body
+        json_data = json.loads(request.body)
+        pi = RaspberryPi.objects.get(serial_num=json_data['serial'])
+        if pi != None:
+            for reading in json_data['readings']:
+                temp , useless= Circuit.objects.get_or_create(circuit_num=reading['circuit_num'],raspberry_pi=pi)
+                reading['circuit'] = temp.id
+                serial = ReadingSerializer(data=reading)
+                if serial.is_valid():
+                    print "valid"
+                    serial.save()
+                else:
+                    print "invalid"
+                    return HttpResponse(content="Bad Reading")
+            return HttpResponse(content="OK")
+        return HttpResponse(content="Specify RPi Serial Number")
 
