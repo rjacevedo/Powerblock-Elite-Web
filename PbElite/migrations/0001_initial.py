@@ -48,6 +48,7 @@ class Migration(SchemaMigration):
             ('raspberry_pi', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['PbElite.RaspberryPi'])),
             ('circuit_name', self.gf('django.db.models.fields.CharField')(max_length=64)),
             ('state', self.gf('django.db.models.fields.BooleanField')()),
+            ('changed', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'PbElite', ['Circuit'])
 
@@ -82,6 +83,7 @@ class Migration(SchemaMigration):
     models = {
         u'PbElite.circuit': {
             'Meta': {'object_name': 'Circuit'},
+            'changed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'circuit_name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'circuit_num': ('django.db.models.fields.IntegerField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
