@@ -103,6 +103,32 @@
 
                         });
                     });
+
+                    
+                </script>
+            </div>
+            <div id="mainDiv2" class="hero-unit">
+                <script type="text/javascript">
+                var login = 1;
+                $.getJSON("/api/grabReadings/" + login + "/", function (circuits){
+                        var contents = '<h2>Circuit Readings</h2>';
+                        contents += '<table>';
+                        contents += '<tr><th style="padding-right: 75px">Circuit Name</th><th style="padding-right: 75px">Power</th><th style="padding-right: 75px">Timestamp</th>';
+                        for (circuit in circuits) {
+                            
+                            
+                            //for (reading in circuits[circuit]) {
+                                contents += '<tr class="spacing">';
+                                contents += '<td>' + circuits[circuit]['name'] + '</td>';
+                                contents += '<td>' + circuits[circuit]['power'] + '</td>';
+                                contents += '<td>' + circuits[circuit]['timestamp'] + '</td>';
+                                contents += '</tr>';
+                            //}
+
+                            }
+                            contents += '</table>';
+                            document.getElementById('mainDiv2').innerHTML += contents;
+                    });
                 </script>
             </div>
         </div>

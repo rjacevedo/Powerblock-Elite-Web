@@ -18,17 +18,16 @@ def test_response(request, login=None):
 
     for circuit in circuits:
         print(circuit)
-        if(circuit.changed == True):
-            response_data['changed'] = True
-            response_data['data'].append({
-                    'circuit_num': circuit.circuit_num,
-                    'circuit_name': circuit.circuit_name,
-                    'state': circuit.state
-                })
-            circuit.changed = False
-            circuit.save()
+        #if(circuit.changed == True):
+        response_data['changed'] = True
+        response_data['data'].append({
+                'circuit_num': circuit.circuit_num,
+                'state': circuit.state
+            })
+        #circuit.changed = False
+        #circuit.save()
 
-    response_data = {
+    '''response_data = {
         'changed': True,
         'data': [
             {
@@ -40,7 +39,7 @@ def test_response(request, login=None):
                 'state': False
             }
         ]
-    }
+    }'''
     
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -109,3 +108,30 @@ def getReading(request):
             return HttpResponse(content="OK")
         return HttpResponse(content="Specify RPi Serial Number")
 
+@csrf_exempt
+def grabReadings(request, login=None):
+    if request.method == 'GET':
+        user = User.objects.get(login_id=login)
+        rpi = RaspberryPi.objects.get(user=user.id)
+        circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
+
+        response_data = {}
+
+        for circuit in circuits:
+            reading = Reading.objects.filter(circuit_id=circuit.id).order_by("-timestamp")[:1]
+            print len(reading)
+            if len(reading) == 0:
+                continue;
+            #response_data[circuit.id] = []
+            '''for reading in readings:
+                response_data[circuit.id].append({
+                        "reading_id": reading.id,
+                        "power": reading.power,
+                        "timestamp": str(reading.timestamp)
+                    })'''
+            response_data[circuit.id] = {
+                    "name": circuit.circuit_name,
+                    "power": reading[0].power,
+                    "timestamp": str(reading[0].timestamp)
+                }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
