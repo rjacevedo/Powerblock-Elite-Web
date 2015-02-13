@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.template import Context, loader
 from django.views.decorators.csrf import csrf_exempt
 from models import *
 import datetime
@@ -44,14 +45,52 @@ def test_response(request, login=None):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
+def grabLogin(request):
+    if(request.method == 'GET'):
+        template = loader.render_to_string("login.html")
+        return HttpResponse(template)
+
+def grabRegistration(request):
+    if(request.method == 'GET'):
+        template = loader.render_to_string("registration.html")
+        return HttpResponse(template)
+
+@csrf_exempt
+def grabAccount(request):
+    if(request.method == 'GET'):
+        template = loader.render_to_string("account.html")
+        return HttpResponse(template)
+
+@csrf_exempt
 def grabHomepage(request):
     if(request.method == 'GET'):
-        file_object = open("PbElite/frontend.html")
+        template = loader.render_to_string("frontend.html")
+        return HttpResponse(template)
 
-        html = file_object.readlines()
+def grabSchedule(request):
+    if(request.method == 'GET'):
+        template = loader.render_to_string("schedule.html")
+        return HttpResponse(template)
 
-        file_object.close()
-        return HttpResponse(html)
+@csrf_exempt
+def loginRequest(request):
+    if(request.method == 'POST'):
+        data = request.POST;
+        username = data["username"]
+        password = data["password"]
+
+        try:
+            user = Login.objects.get(username=username)
+        except Login.DoesNotExist:
+            user = None
+        
+        response_data = {}
+        if hasattr(user, 'password') and password == user.password:
+            response_data['loginSuccess'] = 1
+        else:
+            response_data['loginSuccess'] = 0
+
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 @csrf_exempt
 def updateCircuit(request, login=None, circuitNum=None, value=None):
@@ -66,7 +105,6 @@ def updateCircuit(request, login=None, circuitNum=None, value=None):
 
         response_data = {}
         response_data['result'] = value;
-        print(value)
         #return HttpResponse(json.dumps(success), content_type="application/json")
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 

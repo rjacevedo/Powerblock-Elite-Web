@@ -1,0 +1,103 @@
+﻿html, body 
+{
+    height: 100%;
+}
+
+tr.spacing > td
+{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+            
+.navbar {
+    margin-bottom: 0 !important; 
+}
+
+.background {
+    background-image:url('http://1hdwallpapers.com/wallpapers/beautiful_new_york_city_lights.jpg'); 
+    width: 100%;
+    height: 100%;
+    -webkit-filter: blur(5px);
+    z-index:0;
+    position:absolute;
+}
+
+.container 
+{
+    top: 50%;
+    left: 50%;
+    position: fixed;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 10 !important;
+}
+
+.container-fluid 
+{
+    height: 90%;
+}
+
+.jumbotron 
+{
+    opacity: 0.9; 
+    height: 100%;  
+}
+
+.row-fluid 
+{
+    height: 100%;
+}
+
+#sidebar 
+{
+    padding: 40px;
+    background-color: lightblue;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    height: 100%;
+}
+
+#login, #register {
+    font-size: 14px;
+    vertical-align: top;
+}
+            
+#login label, #register label {
+    display: inline-block;
+}
+            
+#login input[type="text"], #login input[type="password"], #register input[type="text"], #register input[type="password"] {
+    height: 50px;
+    width: 300px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: large;
+    border: 1px solid #ccc;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 1px 1px 1px #666;
+    -webkit-box-shadow: 1px 1px 1px #666;
+    box-shadow: 1px 1px 1px #666;
+    padding: 8px;
+}
+
+#register input[type="text"], #register input[type="password"] 
+{
+    height: 30px;   
+}
+            
+#login input[type="submit"], #register input[type="submit"] {
+    margin: 10px;
+}
+            
+#login #loginError {
+    color: red;
+    display: none;
+}
+            
+#register span {
+    position: absolute;
+    padding: 3px;
+}

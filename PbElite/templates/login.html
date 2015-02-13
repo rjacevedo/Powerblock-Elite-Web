@@ -1,0 +1,108 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Powerblock Elite</title>
+
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}"/>
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+            if(document.cookie) {
+                var postData = {};
+                postData['username'] = getCookie("username");
+                postData['password'] = getCookie("password");
+
+                //makeLoginRequest(postData);
+            }
+
+            $(window).bind('keypress', function(e) {
+                if (e.keyCode == 13) {
+                    console.log('pressed enter');
+                    loginRequest();
+                }
+            });
+
+            function loginRequest() {
+                var username = document.getElementById('username').value;
+                var password = document.getElementById('password').value;
+
+                if(document.getElementById('stayLoggedIn').checked) {
+                createLoginCookie(username, password);
+                }
+
+                var postData = {};
+                postData['username'] = username;
+                postData['password'] = password;
+
+                makeLoginRequest(postData);
+            }
+
+            function makeLoginRequest(postData) {
+            $.ajax({
+            type: "POST",
+            url: "/loginRequest/",
+            data: postData,
+            success: function (data) {
+            if(data.loginSuccess == 1) {
+            window.location = "/home/";
+            } else {
+            document.getElementById('loginError').style.display = "block";
+            }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log("error: " + errorThrown);
+            }
+            });
+            }
+
+            function createLoginCookie(username, password) {
+            document.cookie = "username=" + username;
+            document.cookie = "password=" + password;
+            }
+
+            function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while(c.charAt(0) == ' ') c = c.substring(1);
+                    if(c.indexOf(name) == 0) return c.substring(name.length, c.length);
+                }
+                return "";
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="background"></div>
+        <div class="container">
+            <div id="mainDiv" class="jumbotron">
+                <h2>Powerblock Elite Login</h2>
+                <div id="login">
+                    <div>
+                        <input type="text" id="username" placeholder="username"/>
+                        <br/>
+                        <input type="password" id="password" placeholder="password" />
+                    </div>
+                    <div id="loginError">The username/password is incorrect. Please try again.</div>
+                    <div style="margin-bottom: 5px; margin-top: 5px;">
+                        <input type="checkbox" id="stayLoggedIn"/>
+                        <span style="font-size: medium; ">Keep me logged in</span>
+                    </div>
+                    <div style="margin-bottom: 10px; font-size: medium;">
+                        New to Powerblock Elite? <a>Register here</a>
+                    </div>
+                    <button type="button" class="btn btn-large btn-primary" onclick="loginRequest()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

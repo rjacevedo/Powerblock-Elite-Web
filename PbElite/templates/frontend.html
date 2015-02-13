@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html> 
+<html>
+	<head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Powerblock Elite</title>
+
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}"/>
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript" src="{% static "js/main.js" %}"></script>
+    </head>
+	<body> 
+        <nav class="navbar navbar-default navbar-static-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <div class="navbar-brand">Powerblock Elite</div>
+                </div>
+
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="/home/">Home</a></li>
+                        <li><a href="/schedule/">Schedules</a></li>
+                        <li><a href="/account/">Account</a></li>
+                        
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a onclick="signOut()" style="cursor: pointer">Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div id="sidebar" class="col-md-3">
+                    <script type="text/javascript">
+                        var html = '';
+
+                        var login = 1;
+                        $.getJSON("/circuits/" + login + "/", function (circuits) {
+                            var contents = '<table style="display: inline-block; vertical-align: top" class="circuitList">';
+                            for (i in circuits) {
+                                contents += '<tr class="spacing">';
+                                contents += '<td><span><input type="hidden" id="circuit' + circuits[i].num + '" value="' + circuits[i].state + '" /></span>';
+                                contents += '<button type="button" class="btn btn-xs btn-danger btn-number">';
+                                contents += '<span class="glypicon glyphicon-minus"></span>';
+                                contents += '</button>';
+                                contents += '<span style="cursor: pointer; margin-left: 3px;">' + circuits[i].name + '</span>';
+                                contents += '<span id="display' + circuits[i].num + '"></span></td>';
+                                contents += '<td><div class="btn-group btn-toggle" style="padding-left:20px">';
+                                contents += '<button class=' + (circuits[i].state == true ? '"btn btn-primary active"' : '"btn btn-default"') + 'onclick="changeVal(' + circuits[i].num + ')">On</button>';
+                                contents += '<button class=' + (circuits[i].state == true ? '"btn btn-default"' : '"btn btn-primary active"') + 'onclick="changeVal(' + circuits[i].num + ')">Off</button>';
+                                contents += '</div></td>';
+                                contents += '</tr>';
+                            }
+                            contents += '<tr style="cursor: pointer"><td><button type="button" class="btn btn-success" style="margin-top: 10px;">';
+                            contents += '<span class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right: 3px;"></span>';
+                            contents += 'Add a room';
+                            contents += '</button></td></tr/>';
+                            contents += "</table>";
+                            document.getElementById('sidebar').innerHTML += contents;
+
+                            
+
+                            $('.btn-toggle').click(function () {
+                                $(this).find('.btn').toggleClass('active');
+
+                                if ($(this).find('.btn-primary').size() > 0) {
+                                    $(this).find('.btn').toggleClass('btn-primary');
+                                }
+                                if ($(this).find('.btn-danger').size() > 0) {
+                                    $(this).find('.btn').toggleClass('btn-danger');
+                                }
+                                if ($(this).find('.btn-success').size() > 0) {
+                                    $(this).find('.btn').toggleClass('btn-success');
+                                }
+                                if ($(this).find('.btn-info').size() > 0) {
+                                    $(this).find('.btn').toggleClass('btn-info');
+                                }
+
+                                $(this).find('.btn').toggleClass('btn-default');
+
+                            });
+                        });
+                    </script>
+                </div>
+                
+                <div id="main" class="col-md-9 jumbotron"> 
+                    <h2> 
+		                Powerblock Elite Home
+	                </h2> 
+                    <span id="linechart_material"></span>;
+                    <script type="text/javascript">
+                        drawChart();
+                    </script>                    
+                </div>
+                <div id="mainDiv2" class="hero-unit" style="display: none">
+                    <script type="text/javascript">
+                    var login = 1;
+                    $.getJSON("/api/grabReadings/" + login + "/", function (circuits){
+                            var contents = '<h2>Circuit Readings</h2>';
+                            contents += '<table>';
+                            contents += '<tr><th style="padding-right: 75px">Circuit Name</th><th style="padding-right: 75px">Power</th><th style="padding-right: 75px">Timestamp</th>';
+                            for (circuit in circuits) {
+                                    contents += '<tr class="spacing">';
+                                    contents += '<td>' + circuits[circuit]['name'] + '</td>';
+                                    contents += '<td>' + circuits[circuit]['power'] + '</td>';
+                                    contents += '<td>' + circuits[circuit]['timestamp'] + '</td>';
+                                    contents += '</tr>';
+                                }
+                                contents += '</table>';
+                                document.getElementById('mainDiv2').innerHTML += contents;
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+	</body> 
+</html>
