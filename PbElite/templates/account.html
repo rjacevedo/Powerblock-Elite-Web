@@ -44,6 +44,21 @@
                 <h3>Update your account</h3>
                 <div id="account">
                     <div>
+                        <script type="text/javascript">
+                            String.prototype.capitalize = function() {
+                                return this.charAt(0).toUpperCase() + this.slice(1);
+                            }
+
+                            var login = 1;
+                            /*$.getJSON("/account/" + login + "/", function (accountDetails) {
+                                var contents = "";
+
+                                for(detail in accountDetails) {
+                                    contents += '<label for="' + detail + '">' + detail.capitalize() + ':</label>';
+                                    contents += '<input type="text" id="' + detail + '" value="' + accountDetails[detail] + '"/>';
+                                }
+                            }*/
+                        </script>
                         <label for="username">Username:</label>
                         <input type="text" id="username" value="Javier"/>
                         <br/>

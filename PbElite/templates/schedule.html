@@ -74,14 +74,14 @@
                             $.getJSON("/circuits/" + login + "/", function (circuits) {
                                 var contents = '';
                                 for (i in circuits) {
-                                    contents += '<option value=' + circuits[i].num + '>';
+                                    contents += '<option value="' + circuits[i].name + '">';
                                     contents += circuits[i].name + '</option>';
                                 }
                                 document.getElementById('eventRoomSelect').innerHTML = contents;
                             });
                         </script>
                     </select>
-                    <select>
+                    <select id="eventRoomState">
                         <option value="on">on</option>
                         <option value="off">off</option>
                     </select>
