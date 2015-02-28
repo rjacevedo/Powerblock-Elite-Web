@@ -97,7 +97,7 @@ def updateCircuit(request, login=None, circuitNum=None, value=None):
     if(request.method == 'POST'):
         user = User.objects.get(login_id=login)
         rpi = RaspberryPi.objects.get(user=user.id)
-        circuit = Circuit.objects.get(raspberry_pi=rpi.id, circuit_num=circuitNum)
+        circuit = Circuit.objects.get(raspberry_pi=rpi.id, id=circuitNum)
 
         circuit.state = True if value=="1" else False
         circuit.changed = True
@@ -118,7 +118,7 @@ def grabCircuits(request, login=None):
 
         for circuit in circuits:
             response_data.append({
-                    "num": circuit.circuit_num,
+                    "num": circuit.id,
                     "name": circuit.circuit_name,
                     "state": circuit.state
                 })

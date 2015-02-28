@@ -17,15 +17,7 @@
         },
         eventRender: function (event, element) {
             element.attr('title', event.description);
-        },
-        /*eventMouseover: function (event, jsEvent, view) {
-            console.log('in here');
-            $('.fc-event-inner', this).append('<div class="hover-end">' + "abc" + '</div>');
-        },
-
-        eventMouseout: function (event, jsEvent, view) {
-           // $('#' + event.id).remove();
-        }*/
+        }
     });
 
     var startDate = new Date("February 2, 2015 08:00:00");
@@ -45,9 +37,10 @@
 
 function addEvent() {
     var title = document.getElementById('eventTitle').value;
-    var room = document.getElementById('eventRoomSelect').value;
+    var roomNum = document.getElementById('eventRoomSelect').value;
     var roomState = document.getElementById('eventRoomState').value;
-    var roomDescription = room + " is " + roomState;
+    var roomName = $("#eventRoomSelect option:selected").text();
+    var roomDescription = roomName + " is " + roomState;
 
     var date = document.getElementById('eventDate').value;
     var startHour = document.getElementById('eventStartHour').value;
@@ -64,14 +57,14 @@ function addEvent() {
     var startDate = new Date(date + ", " + startHour + ":" + startMin);
     var endDate = new Date(date + ", " + endHour + ":" + endMin);
 
-    addCalendarEvent(title, startDate, endDate, roomDescription);
+    addCalendarEvent(title, startDate, endDate, roomNum, roomDescription);
 }
 
-function addCalendarEvent(title, start, end, room) {
-    console.log(room);
+function addCalendarEvent(title, start, end, roomNum, roomDescription) {
     var event = {
         title: title,
-        description: room,
+        roomNum: roomNum,
+        description: roomDescription,
         start: start,
         end: end
     }

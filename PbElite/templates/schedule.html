@@ -74,7 +74,7 @@
                             $.getJSON("/circuits/" + login + "/", function (circuits) {
                                 var contents = '';
                                 for (i in circuits) {
-                                    contents += '<option value="' + circuits[i].name + '">';
+                                    contents += '<option value="' + circuits[i].num + '">';
                                     contents += circuits[i].name + '</option>';
                                 }
                                 document.getElementById('eventRoomSelect').innerHTML = contents;
