@@ -25,7 +25,7 @@ urlpatterns = patterns('',
     url(r'^schedule/', 'PbElite.views.grabSchedule'),
     url(r'^register/', 'PbElite.views.grabRegistration'),
     url(r'^api/getUserData/(?P<userID>[0-9]+)/$', 'PbElite.views.getUserData'),
-    url(r'^api/newCalenderEvent, PbElite.views.postNewEvent),
+    url(r'^api/newCalenderEvent', 'PbElite.views.postNewEvent'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
