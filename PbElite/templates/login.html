@@ -16,8 +16,8 @@
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript">
             $(window).bind('keypress', function(e) {
+                // enter is pressed
                 if (e.keyCode == 13) {
-                    console.log('pressed enter');
                     loginRequest();
                 }
             });
@@ -26,33 +26,43 @@
                 var username = document.getElementById('username').value;
                 var password = document.getElementById('password').value;
 
-                if(document.getElementById('stayLoggedIn').checked) {
-                    //need to create cookie on server side
-                }
-
                 var postData = {};
                 postData['username'] = username;
+                // remember to eventually encrypt the password before sending
                 postData['password'] = password;
-
                 makeLoginRequest(postData);
             }
 
             function makeLoginRequest(postData) {
                 $.ajax({
-                    type: "POST",
-                    url: "/loginRequest/",
-                    data: postData,
-                    success: function (data) {
-                        if(data.loginSuccess == 1) {
-                            window.location = "/home/";
-                        } else {
-                            document.getElementById('loginError').style.display = "block";
+                type: "POST",
+                url: "/loginRequest/",
+                data: postData,
+                success: function (data) {
+                    if(data.loginSuccess == 1) {
+                        if(document.getElementById('stayLoggedIn').checked) {
+                            document.cookie = 'loginsession=' + data.hash;
                         }
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        console.log("error: " + errorThrown);
+                        window.location = "/home/";
+                    } else {
+                        document.getElementById('loginError').style.display = "block";
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("error: " + errorThrown);
                     }
                 });
+            }
+
+            function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while(c.charAt(0) == ' ') c = c.substring(1);
+                    if(c.indexOf(name) == 0) return c.substring(name.length, c.length);
+                }
+                return "";
             }
         </script>
     </head>

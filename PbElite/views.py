@@ -59,6 +59,7 @@ def grabAccount(request):
 
 @csrf_exempt
 def grabHomepage(request):
+    """if not authenticated on any of these pages, should return login page + invalid login message"""
     if(request.method == 'GET'):
         template = loader.render_to_string("frontend.html")
         return HttpResponse(template)
@@ -83,6 +84,7 @@ def loginRequest(request):
         response_data = {}
         if hasattr(user, 'password') and password == user.password:
             response_data['loginSuccess'] = 1
+            response_data['hash'] = os.urandom(16).encode('hex')
         else:
             response_data['loginSuccess'] = 0
 
@@ -186,7 +188,7 @@ def getUserData(request, userID=None):
         response_data['country'] = rpi.country
         response_data['postal_code'] = rpi.postal_code
         return HttpResponse(json.dumps(response_data), content_type="application/json")
-        
+
 
 
     
