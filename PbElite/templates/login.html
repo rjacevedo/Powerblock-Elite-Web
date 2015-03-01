@@ -15,17 +15,9 @@
         <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript">
-            if(document.cookie) {
-                var postData = {};
-                postData['username'] = getCookie("username");
-                postData['password'] = getCookie("password");
-
-                //makeLoginRequest(postData);
-            }
-
             $(window).bind('keypress', function(e) {
+                // enter is pressed
                 if (e.keyCode == 13) {
-                    console.log('pressed enter');
                     loginRequest();
                 }
             });
@@ -33,39 +25,32 @@
             function loginRequest() {
                 var username = document.getElementById('username').value;
                 var password = document.getElementById('password').value;
-
-                if(document.getElementById('stayLoggedIn').checked) {
-                createLoginCookie(username, password);
-                }
-
                 var postData = {};
                 postData['username'] = username;
+                // remember to eventually encrypt the password before sending
                 postData['password'] = password;
-
                 makeLoginRequest(postData);
             }
 
             function makeLoginRequest(postData) {
-            $.ajax({
-            type: "POST",
-            url: "/loginRequest/",
-            data: postData,
-            success: function (data) {
-            if(data.loginSuccess == 1) {
-            window.location = "/home/";
-            } else {
-            document.getElementById('loginError').style.display = "block";
-            }
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log("error: " + errorThrown);
-            }
-            });
-            }
-
-            function createLoginCookie(username, password) {
-            document.cookie = "username=" + username;
-            document.cookie = "password=" + password;
+                $.ajax({
+                type: "POST",
+                url: "/loginRequest/",
+                data: postData,
+                success: function (data) {
+                    if(data.loginSuccess == 1) {
+                        if(document.getElementById('stayLoggedIn').checked) {
+                            document.cookie = 'loginsession=' + data.hash;
+                        }
+                        window.location = "/home/";
+                    } else {
+                        document.getElementById('loginError').style.display = "block";
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("error: " + errorThrown);
+                    }
+                });
             }
 
             function getCookie(cname) {
