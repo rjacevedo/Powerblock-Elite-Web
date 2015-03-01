@@ -35,10 +35,9 @@ class Reading(models.Model):
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
 class Schedule(models.Model):
-    raspberry_pi = models.ForeignKey(RaspberryPi)
     start_time = models.DateTimeField(default=datetime.datetime.now)
     end_date = models.DateTimeField(default=datetime.datetime.now)
-    description = models.CharField(max_length=64)
+    description = models.CharField(max_length=512)
     circuit = models.ForeignKey(Circuit)
     state = models.BooleanField(default=0)
 

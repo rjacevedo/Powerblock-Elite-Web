@@ -84,11 +84,16 @@ def loginRequest(request):
         response_data = {}
         if hasattr(user, 'password') and password == user.password:
             response_data['loginSuccess'] = 1
-            response_data['hash'] = os.urandom(16).encode('hex')
+            rhash = os.urandom(16).encode('hex')
+            usr = User.objects.get(login = user)
+            expiry = datetime.datetime.strftime(datetime.datetime.utcnow() + datetime.timedelta(days=7))
+            us = UserSession(usr, rhash, expiry)
+            if (us.is_valid()):
+                us.save()
         else:
             response_data['loginSuccess'] = 0
 
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return setCookieResponse(HttpResponse(json.dumps(response_data), content_type="application/json"), 'session', rhash, expiry)
 
 @csrf_exempt
 def updateCircuit(request, login=None, circuitNum=None, value=None):
@@ -211,3 +216,27 @@ def updateUserData(request):
         rpi.postal_code = data['postalCode'];
         rpi.save();
         return HttpResponse()
+
+def postNewEvent(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body)
+        """subject to change"""
+        start_time = json_data['start_time']
+        end_time = json_data['end_time']
+        desc = json_data['desc']
+        circuit_id = json_data['circuit_id']
+        onoff = json_data['onoff']
+        circuit = Circuit.objects.get(pk = circuit_id)
+        schedule = Schedule(start_time, end_date, desc, circuit, onoff)
+        if schedule.is_valid():
+            schedule.save()
+            return HttpResponse(content="OK")
+    return HttpResponse(content="Not OK")
+
+def setCookieResponse(response, key, value, expiry):
+    if response == None:
+        return HttpResponse(content="No Response")
+    if expiry == None:
+        expiry = datetime.datetime.strftime(datetime.datetime.utcnow() + datetime.timedelta(days=7))
+    response.set_cookie(key, value, max_age=7*24*60*60, expires=expires, domain=settings.SESSION_COOKIE_DOMAIN, secure=settings.SESSION_COOKIE_SECURE or None)
+    return response
