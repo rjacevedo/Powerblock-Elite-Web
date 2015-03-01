@@ -6,7 +6,7 @@ function drawChart() {
 
     var data = new google.visualization.DataTable();
     data.addColumn('number', 'Day');
-    data.addColumn('number', 'Guardians of the Galaxy');
+    data.addColumn('number', 'Energy Usage');
 
     data.addRows([
         [1, 37.8],

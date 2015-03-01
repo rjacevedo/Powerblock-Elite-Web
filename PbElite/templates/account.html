@@ -50,14 +50,15 @@
                             }
 
                             var login = 1;
-                            /*$.getJSON("/account/" + login + "/", function (accountDetails) {
+                            $.getJSON("/api/getUserData/" + login + "/", function (accountDetails) {
+                                console.log(accountDetails);
                                 var contents = "";
 
-                                for(detail in accountDetails) {
+                                for (detail in accountDetails) {
                                     contents += '<label for="' + detail + '">' + detail.capitalize() + ':</label>';
                                     contents += '<input type="text" id="' + detail + '" value="' + accountDetails[detail] + '"/>';
                                 }
-                            }*/
+                            });
                         </script>
                         <label for="username">Username:</label>
                         <input type="text" id="username" value="Javier"/>

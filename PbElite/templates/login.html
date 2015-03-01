@@ -15,14 +15,6 @@
         <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript">
-            if(document.cookie) {
-                var postData = {};
-                postData['username'] = getCookie("username");
-                postData['password'] = getCookie("password");
-
-                //makeLoginRequest(postData);
-            }
-
             $(window).bind('keypress', function(e) {
                 if (e.keyCode == 13) {
                     console.log('pressed enter');
@@ -35,7 +27,7 @@
                 var password = document.getElementById('password').value;
 
                 if(document.getElementById('stayLoggedIn').checked) {
-                createLoginCookie(username, password);
+                    //need to create cookie on server side
                 }
 
                 var postData = {};
@@ -46,37 +38,21 @@
             }
 
             function makeLoginRequest(postData) {
-            $.ajax({
-            type: "POST",
-            url: "/loginRequest/",
-            data: postData,
-            success: function (data) {
-            if(data.loginSuccess == 1) {
-            window.location = "/home/";
-            } else {
-            document.getElementById('loginError').style.display = "block";
-            }
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log("error: " + errorThrown);
-            }
-            });
-            }
-
-            function createLoginCookie(username, password) {
-            document.cookie = "username=" + username;
-            document.cookie = "password=" + password;
-            }
-
-            function getCookie(cname) {
-            var name = cname + "=";
-            var ca = document.cookie.split(';');
-            for(i = 0; i < ca.length; i++) {
-                    var c = ca[i];
-                    while(c.charAt(0) == ' ') c = c.substring(1);
-                    if(c.indexOf(name) == 0) return c.substring(name.length, c.length);
-                }
-                return "";
+                $.ajax({
+                    type: "POST",
+                    url: "/loginRequest/",
+                    data: postData,
+                    success: function (data) {
+                        if(data.loginSuccess == 1) {
+                            window.location = "/home/";
+                        } else {
+                            document.getElementById('loginError').style.display = "block";
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log("error: " + errorThrown);
+                    }
+                });
             }
         </script>
     </head>

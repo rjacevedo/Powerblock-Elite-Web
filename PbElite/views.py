@@ -18,15 +18,11 @@ def test_response(request, login=None):
         }
 
     for circuit in circuits:
-        print(circuit)
-        #if(circuit.changed == True):
         response_data['changed'] = True
         response_data['data'].append({
                 'circuit_num': circuit.circuit_num,
                 'state': circuit.state
             })
-        #circuit.changed = False
-        #circuit.save()
 
     '''response_data = {
         'changed': True,
@@ -105,7 +101,6 @@ def updateCircuit(request, login=None, circuitNum=None, value=None):
 
         response_data = {}
         response_data['result'] = value;
-        #return HttpResponse(json.dumps(success), content_type="application/json")
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def grabCircuits(request, login=None):
@@ -175,6 +170,7 @@ def grabReadings(request, login=None):
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def getUserData(request, userID=None):
+    print userID
     if userID == None : 
         return HttpResponse(content="Bad User Name")
     if request.method == 'GET' :

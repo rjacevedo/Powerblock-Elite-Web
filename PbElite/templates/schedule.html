@@ -70,6 +70,7 @@
                     <label>Turn</label>
                     <select id="eventRoomSelect">
                         <script type="text/javascript">
+                            //hard code for now until authentication is complete
                             var login = 1;
                             $.getJSON("/circuits/" + login + "/", function (circuits) {
                                 var contents = '';
