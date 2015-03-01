@@ -173,3 +173,28 @@ def grabReadings(request, login=None):
                     "timestamp": str(reading[0].timestamp)
                 }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+def getUserData(request, userID=None):
+    if userID == None : 
+        return HttpResponse(content="Bad User Name")
+    if request.method == 'GET' :
+        user = User.objects.get(login_id = userID)
+        rpi = RaspberryPi.objects.get(user = userID)
+        response_data = {}
+        response_data['firstName'] = user.first_name
+        response_data['lastName'] = user.last_name
+        response_data['email'] = user.email
+        response_data['streetNum'] = rpi.street_num
+        response_data['street_name'] = rpi.street_name
+        response_data['city'] = rpi.city
+        response_data['country'] = rpi.country
+        response_data['postal_code'] = rpi.postal_code
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        
+
+
+    
+
+
+
+
