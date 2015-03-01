@@ -14,9 +14,7 @@
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.js"></script>
         <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-        <script type="text/javascript">
-            
-        </script>
+        <script type="text/javascript" src="{% static "js/account.js" %}"></script>
     </head>
 
     <body>
@@ -43,47 +41,43 @@
             <div id="mainDiv" class="jumbotron">
                 <h3>Update your account</h3>
                 <div id="account">
-                    <div>
+                    <div id="accountDetails">
                         <script type="text/javascript">
                             String.prototype.capitalize = function() {
                                 return this.charAt(0).toUpperCase() + this.slice(1);
                             }
 
                             var login = 1;
-                            $.getJSON("/api/getUserData/" + login + "/", function (accountDetails) {
-                                console.log(accountDetails);
+                            $.getJSON("/api/getUserData/", { userID: login }, function (accountDetails) {
                                 var contents = "";
 
-                                for (detail in accountDetails) {
-                                    contents += '<label for="' + detail + '">' + detail.capitalize() + ':</label>';
-                                    contents += '<input type="text" id="' + detail + '" value="' + accountDetails[detail] + '"/>';
-                                }
+                                contents += '<label for="email">Email:</label>';
+                                contents += '<input type="text" id="email" value="' + accountDetails['email'] + '"/>';
+                                contents += '<br />';
+                                contents += '<label for="firstName">First Name:</label>';
+                                contents += '<input type="text" id="firstName" value="' + accountDetails['firstName'] + '"/>';
+                                contents += '<br />';
+                                contents += '<label for="lastname">Last Name:</label>';
+                                contents += '<input type="text" id="lastName" value="' + accountDetails['lastName'] + '"/>';
+                                contents += '<br />';
+                                contents += '<label for="adress">Address:</label>';
+                                contents += '<input type="text" id="address" value="' + accountDetails['streetNum'] + ' ' + accountDetails['street_name'] + '"/>';
+                                contents += '<br />';
+                                contents += '<label for="city">City:</label>';
+                                contents += '<input type="text" id="city" value="' + accountDetails['city'] + '"/>';
+                                contents += '<br />';
+                                contents += '<label for="country">Country:</label>';
+                                contents += '<input type="text" id="country" value="' + accountDetails['country'] + '"/>';
+                                contents += '<br />';
+                                contents += '<label for="postalCode">Postal Code:</label>';
+                                contents += '<input type="text" id="postalCode" value="' + accountDetails['postal_code'] + '"/>';
+
+                                document.getElementById('accountDetails').innerHTML += contents;
                             });
                         </script>
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" value="Javier"/>
-                        <br/>
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" value="Ching"/>
-                        <br />
-                        <label for="email">Email:</label>
-                        <input type="text" id="email" value="javier@uwaterloo.ca"/>
-                        <br />
-                        <label for="address">Address:</label>
-                        <input type="text" id="address" value="123 Main Street"/>
-                        <br />
-                        <label for="city">City:</label>
-                        <input type="text" id="city" value="Waterloo"/>
-                        <br />
-                        <label for="country">Country:</label>
-                        <input type="text" id="country" value="Canada"/>
-                        <br />
-                        <label for="postalCode">Postal Code:</label>
-                        <input type="text" id="postalCode" value="A2B 3C4"/>
-                        <br />
                     </div>
                     <div>
-                        <button type="button" class="btn btn-large btn-primary">Update </button>
+                        <button type="button" class="btn btn-large btn-primary" onclick="updateUserDetails()">Update</button>
                     </div>
                 </div>
             </div>

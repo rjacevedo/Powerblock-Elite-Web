@@ -176,13 +176,14 @@ def grabReadings(request, login=None):
                 }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
-def getUserData(request, userID=None):
-    print userID
-    if userID == None : 
+def getUserData(request):
+    data = request.GET;
+    
+    if data['userID'] == None : 
         return HttpResponse(content="Bad User Name")
     if request.method == 'GET' :
-        user = User.objects.get(login_id = userID)
-        rpi = RaspberryPi.objects.get(user = userID)
+        user = User.objects.get(login_id = data['userID'])
+        rpi = RaspberryPi.objects.get(user = data['userID'])
         response_data = {}
         response_data['firstName'] = user.first_name
         response_data['lastName'] = user.last_name
@@ -193,6 +194,28 @@ def getUserData(request, userID=None):
         response_data['country'] = rpi.country
         response_data['postal_code'] = rpi.postal_code
         return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@csrf_exempt
+def updateUserData(request):
+    if(request.method == 'POST'):
+        data = request.POST;
+
+        user = User.objects.get(login_id=data['userID'])
+        rpi = RaspberryPi.objects.get(user=data['userID'])
+
+        user.first_name = data['firstName'];
+        user.last_name = data['lastName'];
+        user.email = data['email'];
+        user.save();
+        
+        addressArray = data['address'].split(" ");
+        rpi.street_num = addressArray[0];
+        rpi.street_name = addressArray[1];
+        rpi.city = data['city'];
+        rpi.country = data['country'];
+        rpi.postal_code = data['postalCode'];
+        rpi.save();
+        return HttpResponse()
 
 def postNewEvent(request):
     if request.method == 'POST':
@@ -231,7 +254,5 @@ def checkCookie(request, response):
     
     template = loader.render_to_string("login.html")
     return HttpResponse(template)
-
-
 
 
