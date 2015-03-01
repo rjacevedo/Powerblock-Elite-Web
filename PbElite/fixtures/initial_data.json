@@ -105,9 +105,8 @@
 		"model": "PbElite.Circuit",
 		"pk": 1,
 		"fields": {
-			"circuit_num": "1",
 			"raspberry_pi": 1,
-			"circuit_name": "javier's living room",
+			"circuit_name": "Living Room",
 			"state": true,
 			"changed": false
 		}
@@ -116,7 +115,6 @@
 		"model": "PbElite.Circuit",
 		"pk": 2,
 		"fields": {
-			"circuit_num": "1",
 			"raspberry_pi": 2,
 			"circuit_name": "raul's room",
 			"state": true,
@@ -127,7 +125,6 @@
 		"model": "PbElite.Circuit",
 		"pk": 3,
 		"fields": {
-			"circuit_num": "1",
 			"raspberry_pi": 3,
 			"circuit_name": "andy's room",
 			"state": true,
@@ -138,10 +135,19 @@
 		"model": "PbElite.Circuit",
 		"pk": 4,
 		"fields": {
-			"circuit_num": "2",
 			"raspberry_pi": 1,
-			"circuit_name": "javier's bedroom",
+			"circuit_name": "Bedroom",
 			"state": true,
+			"changed": false
+		}
+	},
+	{
+		"model": "PbElite.Circuit",
+		"pk": 5,
+		"field": {
+			"raspberry_pi": 1,
+			"circuit_name": "Washroom",
+			"state": false,
 			"changed": false
 		}
 	},
@@ -153,6 +159,15 @@
 			"circuit": 1,
             "power" : 1,
 			"timestamp": "2014-07-18T21:20:30-05:00"
+		}
+	},
+	{
+		"model": "PbElite.Reading",
+		"pk": 2,
+		"fields": {
+			"circuit": 4,
+			"power": 123,
+			"timestamp": "2015-02-01T12:30:30-01:00"
 		}
 	}
 ]

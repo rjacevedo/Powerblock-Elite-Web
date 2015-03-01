@@ -24,7 +24,6 @@ class RaspberryPi(models.Model):
     postal_code = models.CharField(max_length=10)
 
 class Circuit(models.Model):
-    circuit_num = models.IntegerField()
     raspberry_pi = models.ForeignKey(RaspberryPi)
     circuit_name = models.CharField(max_length=64)
     state = models.BooleanField(default=True);
@@ -35,7 +34,13 @@ class Reading(models.Model):
     power = models.FloatField()
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
-
+class Schedule(models.Model):
+    raspberry_pi = models.ForeignKey(RaspberryPi)
+    start_time = models.DateTimeField(default=datetime.datetime.now)
+    end_date = models.DateTimeField(default=datetime.datetime.now)
+    description = models.CharField(max_length=64)
+    circuit = models.ForeignKey(Circuit)
+    state = models.BooleanField(default=0)
 
 
 
