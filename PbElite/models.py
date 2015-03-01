@@ -35,7 +35,10 @@ class Reading(models.Model):
     power = models.FloatField()
     timestamp = models.DateTimeField(default=datetime.datetime.now)
 
-
+class UserSessions(models.Model):
+    username = models.ForeignKey(User)
+    randomhash = models.CharField(max_length=256)
+    expiry_datetime = models.DateTimeField()
 
 
 
