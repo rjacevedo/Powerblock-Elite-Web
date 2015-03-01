@@ -189,6 +189,21 @@ def getUserData(request, userID=None):
         response_data['postal_code'] = rpi.postal_code
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+def postNewEvent(request):
+    if request.method == 'POST':
+        json_data = json.loads(request.body)
+        """subject to change"""
+        start_time = json_data['start_time']
+        end_time = json_data['end_time']
+        desc = json_data['desc']
+        circuit_id = json_data['circuit_id']
+        onoff = json_data['onoff']
+        circuit = Circuit.objects.get(pk = circuit_id)
+        schedule = Schedule(start_time, end_date, desc, circuit, onoff)
+        if schedule.is_valid():
+            schedule.save()
+            return HttpResponse(content="OK")
+    return HttpResponse(content="Not OK")
 
 
     
