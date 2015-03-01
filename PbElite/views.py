@@ -49,25 +49,25 @@ def grabLogin(request):
 def grabRegistration(request):
     if(request.method == 'GET'):
         template = loader.render_to_string("registration.html")
-        return HttpResponse(template)
+        return checkCookie(request,HttpResponse(template))
 
 @csrf_exempt
 def grabAccount(request):
     if(request.method == 'GET'):
         template = loader.render_to_string("account.html")
-        return HttpResponse(template)
+        return checkCookie(request,HttpResponse(template))
 
 @csrf_exempt
 def grabHomepage(request):
     """if not authenticated on any of these pages, should return login page + invalid login message"""
     if(request.method == 'GET'):
         template = loader.render_to_string("frontend.html")
-        return HttpResponse(template)
+        return checkCookie(request,HttpResponse(template))
 
 def grabSchedule(request):
     if(request.method == 'GET'):
         template = loader.render_to_string("schedule.html")
-        return HttpResponse(template)
+        return checkCookie(request,HttpResponse(template))
 
 @csrf_exempt
 def loginRequest(request):
@@ -217,6 +217,20 @@ def setCookieResponse(response, key, value, expiry):
         expiry = datetime.datetime.strftime(datetime.datetime.utcnow() + datetime.timedelta(days=7))
     response.set_cookie(key, value, max_age=7*24*60*60, expires=expires, domain=settings.SESSION_COOKIE_DOMAIN, secure=settings.SESSION_COOKIE_SECURE or None)
     return response
+
+def checkCookie(request, response):
+    """ghetto it up!"""
+    if request.COOKIES.has_key( 'session' ):
+        sesh = request.COOKIES['session']
+        sessions = UserSessions.objects.get(randomhash = sesh)
+        for s in sessions:
+            if datetime.datetime.utcnow() > s.expiry_datetime:
+                s.delete()
+            else:
+                return response
+    
+    template = loader.render_to_string("login.html")
+    return HttpResponse(template)
 
 
 
