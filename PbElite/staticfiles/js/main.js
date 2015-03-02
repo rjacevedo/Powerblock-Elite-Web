@@ -75,6 +75,15 @@ function changeVal(circuitNum) {
 }
 
 function signOut() {
-    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    $.ajax({
+        type:"GET",
+        url: "/logout/",
+        success: function (data) {
+           document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log("error: " + errorThrown);
+        }
+    });
     window.location = "/login/";
 }

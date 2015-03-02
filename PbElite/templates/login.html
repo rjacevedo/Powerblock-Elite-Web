@@ -22,14 +22,27 @@
                 }
             });
 
+            console.log(getCookie("username"));
+            if (getCookie("username")) {
+                window.location = "/home/";
+            }
+
             function loginRequest() {
                 var username = document.getElementById('username').value;
                 var password = document.getElementById('password').value;
 
-                var postData = {};
-                postData['username'] = username;
+                if (document.getElementById('stayLoggedIn').checked) {
+                    document.cookie = "username=" + username;
+                } else {
+                    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+                }
+
                 // remember to eventually encrypt the password before sending
-                postData['password'] = password;
+                var postData = {
+                    username: username,
+                    password: password
+                };
+                
                 makeLoginRequest(postData);
             }
 

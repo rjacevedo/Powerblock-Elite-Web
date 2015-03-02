@@ -4,6 +4,8 @@ from django.views.decorators.csrf import csrf_exempt
 from models import *
 import datetime
 import json
+import os
+import pytz
 from serializers import ReadingSerializer
 
 @csrf_exempt
@@ -86,10 +88,9 @@ def loginRequest(request):
             response_data['loginSuccess'] = 1
             rhash = os.urandom(16).encode('hex')
             usr = User.objects.get(login = user)
-            expiry = datetime.datetime.strftime(datetime.datetime.utcnow() + datetime.timedelta(days=7))
-            us = UserSession(usr, rhash, expiry)
-            if (us.is_valid()):
-                us.save()
+            expiry = datetime.datetime.now(pytz.utc) + datetime.timedelta(7,0)
+            us = UserSessions(username=usr, randomhash=rhash, expiry_datetime=expiry)
+            us.save()
         else:
             response_data['loginSuccess'] = 0
 
@@ -128,10 +129,7 @@ def grabCircuits(request, login=None):
 
 @csrf_exempt
 def getReading(request):
-    print 'here'
     if request.method == 'POST':
-        print "hello"
-        print request.body
         json_data = json.loads(request.body)
         pi = RaspberryPi.objects.get(serial_num=json_data['serial'])
         if pi != None:
@@ -140,10 +138,8 @@ def getReading(request):
                 reading['circuit'] = temp.id
                 serial = ReadingSerializer(data=reading)
                 if serial.is_valid():
-                    print "valid"
                     serial.save()
                 else:
-                    print "invalid"
                     return HttpResponse(content="Bad Reading")
             return HttpResponse(content="OK")
         return HttpResponse(content="Specify RPi Serial Number")
@@ -159,7 +155,6 @@ def grabReadings(request, login=None):
 
         for circuit in circuits:
             reading = Reading.objects.filter(circuit_id=circuit.id).order_by("-timestamp")[:1]
-            print len(reading)
             if len(reading) == 0:
                 continue;
             #response_data[circuit.id] = []
@@ -217,6 +212,7 @@ def updateUserData(request):
         rpi.save();
         return HttpResponse()
 
+@csrf_exempt
 def postNewEvent(request):
     if request.method == 'POST':
         json_data = json.loads(request.body)
@@ -237,22 +233,31 @@ def setCookieResponse(response, key, value, expiry):
     if response == None:
         return HttpResponse(content="No Response")
     if expiry == None:
-        expiry = datetime.datetime.strftime(datetime.datetime.utcnow() + datetime.timedelta(days=7))
-    response.set_cookie(key, value, max_age=7*24*60*60, expires=expires, domain=settings.SESSION_COOKIE_DOMAIN, secure=settings.SESSION_COOKIE_SECURE or None)
+        expiry = datetime.datetime.utcnow() + datetime.timedelta(days=7)
+    response.set_cookie(key, value, max_age=7*24*60*60, expires=expiry)
     return response
 
 def checkCookie(request, response):
     """ghetto it up!"""
+    template = loader.render_to_string("login.html")
+    loginagain = HttpResponse(template)
     if request.COOKIES.has_key( 'session' ):
         sesh = request.COOKIES['session']
-        sessions = UserSessions.objects.get(randomhash = sesh)
-        for s in sessions:
-            if datetime.datetime.utcnow() > s.expiry_datetime:
+        try:
+            s = UserSessions.objects.get(randomhash = sesh)
+            if datetime.datetime.now(pytz.utc) > s.expiry_datetime:
                 s.delete()
             else:
                 return response
-    
-    template = loader.render_to_string("login.html")
-    return HttpResponse(template)
+        except UserSessions.DoesNotExist:
 
+            return loginagain
+    return loginagain
 
+@csrf_exempt
+def logout (request):
+    if request.COOKIES.has_key('session'):
+        sesh = request.COOKIES['session']
+        s = UserSessions.objects.get(randomhash=sesh)
+        s.delete()
+        return HttpResponse(content='OK')
