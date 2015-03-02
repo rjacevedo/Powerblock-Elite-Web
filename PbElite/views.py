@@ -6,6 +6,7 @@ import datetime
 import json
 import os
 import pytz
+import time
 from serializers import ReadingSerializer
 
 @csrf_exempt
@@ -268,10 +269,10 @@ def getChartData(request):
         data = request.POST
         c = Circuit.objects.get(pk=data['circuit_num'])
         earlystamp = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=30)
-        readings = Reading.objects.all().filter(circuit=c, timestamp__gte=earlystamp)
+        readings = Reading.objects.all().filter(circuit=c, timestamp__gte=earlystamp).order_by('timestamp')
         readingsArr = []
         for r in readings:
-            readingsArr.append({'timestamp':r.timestamp.strftime("%B %d, %Y"), 'reading': r.power})
+            readingsArr.append({'timestamp': time.mktime(r.timestamp.timetuple()), 'reading': r.power})
         response_data = {}
         response_data['circuit_name'] = c.circuit_name
         response_data['readings'] = readingsArr

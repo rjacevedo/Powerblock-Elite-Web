@@ -4,9 +4,9 @@ function drawChart() {
     var width = document.getElementById('main').offsetWidth * 0.9;
     var height = document.getElementById('main').offsetHeight * 0.75;
 
-    var data = new google.visualization.DataTable();
-    data.addColumn('number', 'Day');
-    data.addColumn('number', 'Energy Usage');
+    var chartData = new google.visualization.DataTable();
+    chartData.addColumn('number', 'Day');
+    chartData.addColumn('number', 'Energy Usage');
     $.ajax({
         type: "POST",
         url: "/api/getCircuitData/",
@@ -14,28 +14,16 @@ function drawChart() {
             circuit_num: 1,
         },
         success: function (data) {
-            console.log(data);
+            var contents = [];
+            data.readings.forEach(function(v) {
+                contents.push([v.timestamp, v.reading]);
+            });
+            chartData.addRows(contents);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log("error: " + errorThrown);
         }
     });
-    data.addRows([
-        [1, 37.8],
-        [2, 30.9],
-        [3, 25.4],
-        [4, 11.7],
-        [7, 11.9],
-        [10, 8.8],
-        [12, 7.6],
-        [14, 12.3],
-        [16, 16.9],
-        [18, 12.8],
-        [22, 5.3],
-        [25, 6.6],
-        [28, 4.8],
-        [30, 4.2]
-    ]);
 
     var options = {
         legend: {
@@ -64,7 +52,7 @@ function drawChart() {
 
     var chart = new google.charts.Line(document.getElementById('linechart_material'));
 
-    chart.draw(data, options);
+    chart.draw(chartData, options);
 }
 
 function changeVal(circuitNum) {
