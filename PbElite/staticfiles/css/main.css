@@ -14,10 +14,10 @@ tr.spacing > td
 }
 
 .background {
-    background-image:url('http://1hdwallpapers.com/wallpapers/beautiful_new_york_city_lights.jpg'); 
+    background-image:url("https://i.imgur.com/K08IkG5.jpg"); 
     width: 100%;
     height: 100%;
-    -webkit-filter: blur(5px);
+    /*-webkit-filter: blur(1px);*/  
     z-index:0;
     position:absolute;
 }

@@ -7,7 +7,19 @@ function drawChart() {
     var data = new google.visualization.DataTable();
     data.addColumn('number', 'Day');
     data.addColumn('number', 'Energy Usage');
-
+    $.ajax({
+        type: "POST",
+        url: "/api/getCircuitData/",
+        data: {
+            circuit_num: 1,
+        },
+        success: function (data) {
+            console.log(data);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log("error: " + errorThrown);
+        }
+    });
     data.addRows([
         [1, 37.8],
         [2, 30.9],

@@ -261,3 +261,18 @@ def logout (request):
         s = UserSessions.objects.get(randomhash=sesh)
         s.delete()
         return HttpResponse(content='OK')
+
+@csrf_exempt
+def getChartData(request):
+    if request.method == 'POST':
+        data = request.POST
+        c = Circuit.objects.get(pk=data['circuit_num'])
+        earlystamp = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=30)
+        readings = Reading.objects.all().filter(circuit=c, timestamp__gte=earlystamp)
+        readingsArr = []
+        for r in readings:
+            readingsArr.append({'timestamp':r.timestamp.strftime("%B %d, %Y"), 'reading': r.power})
+        response_data = {}
+        response_data['circuit_name'] = c.circuit_name
+        response_data['readings'] = readingsArr
+        return HttpResponse(json.dumps(response_data), content_type="application/json")

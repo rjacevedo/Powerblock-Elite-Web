@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^api/getUserData/', 'PbElite.views.getUserData'),
     url(r'^api/updateUserData/', 'PbElite.views.updateUserData'),
     url(r'^api/newCalenderEvent/', 'PbElite.views.postNewEvent'),
+    url(r'^api/getCircuitData/', 'PbElite.views.getChartData'),
     url(r'^logout/', 'PbElite.views.logout'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
