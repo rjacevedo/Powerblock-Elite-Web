@@ -144,7 +144,7 @@
 	{
 		"model": "PbElite.Circuit",
 		"pk": 5,
-		"field": {
+		"fields": {
 			"raspberry_pi": 1,
 			"circuit_name": "Washroom",
 			"state": false,
