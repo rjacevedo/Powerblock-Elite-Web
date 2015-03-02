@@ -33,6 +33,15 @@
         startDate.setDate(startDate.getDate() + 2);
         endDate.setDate(endDate.getDate() + 2);
     }
+
+    var login = 1;
+    $.getJSON("/api/getCalendarEvents/", { userID: login }, function (calendarEvents) {
+        calendarEvents.forEach(function (v) {
+            var start = new Date(v.start*1000);
+            var end = new Date(v.end*1000);
+            addCalendarEvent(v.description, start, end, v.circuit);
+        });
+    });
 });
 
 function addEvent() {
@@ -60,11 +69,10 @@ function addEvent() {
     addCalendarEvent(title, startDate, endDate, roomNum, roomDescription);
 }
 
-function addCalendarEvent(title, start, end, roomNum, roomDescription) {
+function addCalendarEvent(description, start, end, roomNum) {
     var event = {
-        title: title,
+        title: description,
         roomNum: roomNum,
-        description: roomDescription,
         start: start,
         end: end
     }

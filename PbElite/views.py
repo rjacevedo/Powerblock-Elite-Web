@@ -230,6 +230,32 @@ def postNewEvent(request):
             return HttpResponse(content="OK")
     return HttpResponse(content="Not OK")
 
+def retrieveEvents(request):
+    data = request.GET
+    if data['userID'] == None : 
+        return HttpResponse(content="Bad User Name")
+    if request.method == 'GET':
+        rpi = RaspberryPi.objects.get(user = data['userID'])
+        circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
+
+        circuitIDs = []
+        for circuit in circuits:
+            circuitIDs.append(circuit.id);
+
+        events = Schedule.objects.filter(circuit__in = circuitIDs)
+        
+        response_data = []
+        for event in events:
+            response_data.append({
+                    'start': time.mktime(event.start_time.timetuple()),
+                    'end': time.mktime(event.end_date.timetuple()),
+                    'description': event.description,
+                    'circuit': event.circuit_id,
+                    'state': event.state
+                })
+
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 def setCookieResponse(response, key, value, expiry):
     if response == None:
         return HttpResponse(content="No Response")
