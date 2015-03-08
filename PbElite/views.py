@@ -8,6 +8,8 @@ import os
 import pytz
 import time
 from serializers import ReadingSerializer
+from scheduler import createUserSchedule
+
 
 @csrf_exempt
 def test_response(request, login=None):
@@ -228,7 +230,7 @@ def postNewEvent(request):
                            state=onoff)
         schedule.save()
         return HttpResponse(content="OK")
-
+       
 def retrieveEvents(request):
     data = request.GET
     if data['userID'] == None : 

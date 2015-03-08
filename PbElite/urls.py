@@ -30,6 +30,8 @@ urlpatterns = patterns('',
     url(r'^api/getCalendarEvents/', 'PbElite.views.retrieveEvents'),
     url(r'^api/getCircuitData/', 'PbElite.views.getChartData'),
     url(r'^logout/', 'PbElite.views.logout'),
+    url(r'^test/', 'PbElite.views.schedule'),
+
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

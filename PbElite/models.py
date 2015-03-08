@@ -1,4 +1,5 @@
 from django.db import models
+from djcelery.models import PeriodicTask, CrontabSchedule
 import datetime
 
 # Create your models here.
@@ -37,9 +38,16 @@ class Reading(models.Model):
 class Schedule(models.Model):
     start_time = models.DateTimeField(default=datetime.datetime.now)
     end_date = models.DateTimeField(default=datetime.datetime.now)
+    start_id = models.ForeignKey(PeriodicTask, related_name='+', null=True)
+    end_id = models.ForeignKey(PeriodicTask, related_name='+', null=True)
     description = models.CharField(max_length=512)
     circuit = models.ForeignKey(Circuit)
     state = models.BooleanField(default=0)
+
+    def delete(self, *args, **kwargs):
+        self.start_id.delete()
+        self.end_id.delete()
+        return super(self.__class__, self).delete(*args, **kwargs)
 
 class UserSessions(models.Model):
     username = models.ForeignKey(User)
