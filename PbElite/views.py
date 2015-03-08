@@ -298,7 +298,7 @@ def getChartData(request):
         readings = Reading.objects.all().filter(circuit=c, timestamp__gte=earlystamp).order_by('timestamp')
         readingsArr = []
         for r in readings:
-            readingsArr.append({'timestamp': time.mktime(r.timestamp.timetuple()), 'reading': r.power})
+            readingsArr.append({'timestamp': time.mktime(r.timestamp.timetuple())*1000, 'reading': r.power})
         response_data = {}
         response_data['circuit_name'] = c.circuit_name
         response_data['readings'] = readingsArr

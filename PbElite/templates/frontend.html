@@ -95,13 +95,13 @@
                     <h2> 
 		                Powerblock Elite Home
 	                </h2> 
-                    <span id="linechart_material"></span>;
+                    <span id="linechart_material"></span>
                     <script type="text/javascript">
-                        drawChart();
+                        drawChart()
                     </script>                    
                 </div>
 
-                <div id="mainDiv2" class="hero-unit" style="display: block">
+                <div id="mainDiv2" class="hero-unit" style="display: none">
                     <script type="text/javascript">
                         var login = 1;
                         $.getJSON("/api/grabReadings/" + login + "/", function (circuits) {

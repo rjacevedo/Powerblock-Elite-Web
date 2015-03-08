@@ -16,6 +16,7 @@ function drawChart() {
         success: function (data) {
             var contents = [];
             data.readings.forEach(function(v) {
+                console.log(new Date(v.timestamp));
                 contents.push([v.timestamp, v.reading]);
             });
             chartData.addRows(contents);

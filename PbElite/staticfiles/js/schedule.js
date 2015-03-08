@@ -66,7 +66,40 @@ function addEvent() {
     var startDate = new Date(date + ", " + startHour + ":" + startMin);
     var endDate = new Date(date + ", " + endHour + ":" + endMin);
 
-    addCalendarEvent(title, startDate, endDate, roomNum, roomDescription);
+    if (startDate > endDate) {
+        $('#modalDateError').show();
+
+        $('.modalDate').off('click');
+        $('.modalDate').click(function () {
+            $('#modalDateError').hide();
+        });
+    } 
+    
+    if (title.length == 0) {
+        $('#eventTitle').attr("placeholder", "Please enter a title");
+        $('#eventTitle').css("border-color", "red");
+
+        $('#eventTitle').off("click");
+        $('#eventTitle').click(function () {
+            $('#eventTitle').attr("placeholder", "");
+            $('#eventTitle').css("border-color", "initial");
+        });
+    }
+
+    if (startDate < endDate && title.length > 0) {
+        $("#addEventModal").modal('hide');
+
+        //send a request to the server to store the event
+        var event = {
+            title: title,
+            roomNum: roomNum,
+            start: startDate,
+            end: endDate,
+            state: roomState
+        }
+
+        addCalendarEvent(title, startDate, endDate, roomNum, roomDescription);
+    }
 }
 
 function addCalendarEvent(description, start, end, roomNum) {
@@ -79,4 +112,10 @@ function addCalendarEvent(description, start, end, roomNum) {
 
     var calendar = $('#calendar');
     calendar.fullCalendar('renderEvent', event);
+}
+
+function resetModal() {
+    $('#eventTitle').attr("placeholder", "");
+    $('#eventTitle').css("border-color", "initial");
+    $('#modalDateError').hide();
 }
