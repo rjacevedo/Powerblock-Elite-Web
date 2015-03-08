@@ -216,19 +216,18 @@ def updateUserData(request):
 @csrf_exempt
 def postNewEvent(request):
     if request.method == 'POST':
-        json_data = json.loads(request.body)
+        json_data = request.POST
         """subject to change"""
-        start_time = json_data['start_time']
-        end_time = json_data['end_time']
+        start_time = datetime.datetime.fromtimestamp(int(json_data['start_time']))
+        end_time = datetime.datetime.fromtimestamp(int(json_data['end_time']))
         desc = json_data['desc']
         circuit_id = json_data['circuit_id']
         onoff = json_data['onoff']
         circuit = Circuit.objects.get(pk = circuit_id)
-        schedule = Schedule(start_time, end_date, desc, circuit, onoff)
-        if schedule.is_valid():
-            schedule.save()
-            return HttpResponse(content="OK")
-    return HttpResponse(content="Not OK")
+        schedule = Schedule(start_time=start_time, end_date=end_time, description=desc, circuit=circuit,
+                           state=onoff)
+        schedule.save()
+        return HttpResponse(content="OK")
 
 def retrieveEvents(request):
     data = request.GET

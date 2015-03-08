@@ -63,9 +63,9 @@ function addEvent() {
         startHour += 12;
     }
 
-    var startDate = new Date(date + ", " + startHour + ":" + startMin);
-    var endDate = new Date(date + ", " + endHour + ":" + endMin);
-
+    var startDate = new Date(date + ", " + startHour + ":" + startMin).getTime()/1000;
+    var endDate = new Date(date + ", " + endHour + ":" + endMin).getTime()/1000;
+    
     if (startDate > endDate) {
         $('#modalDateError').show();
 
@@ -86,17 +86,26 @@ function addEvent() {
         });
     }
 
-    if (startDate < endDate && title.length > 0) {
+    if (startDate <= endDate && title.length > 0) {
         $("#addEventModal").modal('hide');
 
         //send a request to the server to store the event
         var event = {
-            title: title,
-            roomNum: roomNum,
-            start: startDate,
-            end: endDate,
-            state: roomState
+            desc: title,
+            circuit_id: roomNum,
+            start_time: startDate,
+            end_time: endDate,
+            onoff: roomState
         }
+
+        $.ajax({
+            type: "POST",
+            url: "/api/newCalenderEvent/",
+            data: event,
+            success: function (data) {
+                console.log(data);
+            }
+        });
 
         addCalendarEvent(title, startDate, endDate, roomNum, roomDescription);
     }
