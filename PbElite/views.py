@@ -8,6 +8,8 @@ import os
 import pytz
 import time
 from serializers import ReadingSerializer
+from scheduler import createUserSchedule
+
 
 @csrf_exempt
 def test_response(request, login=None):
@@ -217,7 +219,6 @@ def updateUserData(request):
 def postNewEvent(request):
     if request.method == 'POST':
         json_data = json.loads(request.body)
-        """subject to change"""
         start_time = json_data['start_time']
         end_time = json_data['end_time']
         desc = json_data['desc']
@@ -227,6 +228,7 @@ def postNewEvent(request):
         schedule = Schedule(start_time, end_date, desc, circuit, onoff)
         if schedule.is_valid():
             schedule.save()
+            createUserSchedule(schedule.pk, onoff)
             return HttpResponse(content="OK")
     return HttpResponse(content="Not OK")
 
