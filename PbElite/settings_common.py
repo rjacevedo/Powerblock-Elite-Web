@@ -10,9 +10,18 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import os.path
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import djcelery
+djcelery.setup_loader()
+# Should not be used in production BUTT FUCK IT
+BROKER_URL = 'django://'
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
+SETTINGS_PATH = os.path.normpath(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -25,22 +34,27 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+TEMPLATE_DIRS = (
+    os.path.join(SETTINGS_PATH, 'templates'),
+)
+
 ALLOWED_HOSTS = []
 
 
 # Application definition
 
-# INSTALLED_APPS = (
-#     'django.contrib.admin',
-#     'django.contrib.auth',
-#     'django.contrib.contenttypes',
-#     'django.contrib.sessions',
-#     'django.contrib.messages',
-#     'django.contrib.staticfiles',
-#     'PbElite',
-#     'south',
-
-# )
+INSTALLED_APPS = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.staticfiles',
+    'django.contrib.admin',
+    'PbElite',
+    'south',
+    'djcelery',
+    'kombu.transport.django',
+    'rest_framework',
+    'django_nose',
+)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -93,3 +107,22 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+STATICFILES_DIRS = (
+    os.path.join(
+        os.path.dirname(__file__),
+        'staticfiles',
+    ),
+)
+
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static')
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
+
+MEDIA_URL = '/media/'
