@@ -229,6 +229,7 @@ def postNewEvent(request):
         schedule = Schedule(start_time=start_time, end_date=end_time, description=desc, circuit=circuit,
                            state=onoff)
         schedule.save()
+        createUserSchedule(schedule.pk, onoff)
         return HttpResponse(content="OK")
        
 def retrieveEvents(request):
