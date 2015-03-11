@@ -9,7 +9,9 @@ import pytz
 import time
 from serializers import ReadingSerializer
 from scheduler import createUserSchedule
-
+import hashlib
+import uuid
+import re
 
 @csrf_exempt
 def test_response(request, login=None):
@@ -207,9 +209,9 @@ def updateUserData(request):
         user.email = data['email'];
         user.save();
         
-        addressArray = data['address'].split(" ");
-        rpi.street_num = addressArray[0];
-        rpi.street_name = addressArray[1];
+        address = data['address']
+        rpi.street_num = re.sub("\D+", "", address)
+        rpi.street_name = re.sub ("\d",  "", address[1:])
         rpi.city = data['city'];
         rpi.country = data['country'];
         rpi.postal_code = data['postalCode'];
@@ -307,3 +309,49 @@ def getChartData(request):
         response_data['circuit_name'] = c.circuit_name
         response_data['readings'] = readingsArr
         return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+@csrf_exempt
+def registerUser(request):
+    if request.method == 'POST':
+        data = request.POST
+        username = data['username']
+        password = data['password']
+        rpid = data['registrationKey']
+        salt = uuid.uuid4().hex
+        hashed_password = hashlib.sha512(password + salt).hexdigest()
+        try:
+            login = Login.objects.get(username=username)
+            return HttpResponse(content='Duplicate User Name')
+        except Login.DoesNotExist:
+            login = Login(username = username, password = hashed_password, salt = salt)
+            login.save()
+            user = User(login = login, first_name = data['firstname'], last_name = data['lastname'], email = data['email'])
+            user.save()
+            address = data['address']
+            rpi = RaspberryPi(
+                serial_num = rpid,
+                user = user,
+                model = 'Powerblock Elite v1',
+                city = data['city'],
+                country = data['country'],
+                street_num = re.sub("\D+", "", address),
+                street_name = re.sub ("\d",  "", address[1:]),
+                postal_code = data['postalCode']
+            )
+            return HttpResponse(content='OK')
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
