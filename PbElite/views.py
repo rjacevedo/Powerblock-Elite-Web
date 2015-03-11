@@ -340,7 +340,17 @@ def registerUser(request):
             )
             return HttpResponse(content='OK')
         
-
+@csrf_exempt
+def deleteSchedule(request)
+    if request.method == 'POST':
+        data = request.POST
+        schedule_id = data['scheduleID']
+        try:
+            schedule = Schedule.objects.get(pk = schedule_id)
+            schedule.delete()
+            return HttpResponse(content='OK')
+        except Schedule.DoesNotExist:
+            return HttpResponse(content='Bad Schedule ID')
 
 
 

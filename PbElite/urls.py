@@ -32,6 +32,7 @@ urlpatterns = patterns('',
     url(r'^api/getCircuitData/', 'PbElite.views.getChartData'),
     url(r'^logout/', 'PbElite.views.logout'),
     url(r'^test/', 'PbElite.views.schedule'),
+    url(r'^api/deleteSchedule', 'PbElite.views.deleteSchedule'),
 
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
