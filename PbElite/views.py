@@ -57,7 +57,7 @@ def grabLogin(request):
 def grabRegistration(request):
     if(request.method == 'GET'):
         template = loader.render_to_string("registration.html")
-        return checkCookie(request,HttpResponse(template))
+        return HttpResponse(template)
 
 @csrf_exempt
 def grabAccount(request):
@@ -140,7 +140,7 @@ def getReading(request):
         pi = RaspberryPi.objects.get(serial_num=json_data['serial'])
         if pi != None:
             for reading in json_data['readings']:
-                temp , useless= Circuit.objects.get_or_create(circuit_num=reading['circuit_num'],raspberry_pi=pi)
+                temp , useless= Circuit.objects.get_or_create(id=reading['circuit_num'],raspberry_pi=pi)
                 reading['circuit'] = temp.id
                 serial = ReadingSerializer(data=reading)
                 if serial.is_valid():

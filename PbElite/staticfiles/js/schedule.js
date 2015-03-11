@@ -52,6 +52,7 @@ function addEvent() {
     var roomDescription = roomName + " is " + roomState;
 
     var date = document.getElementById('eventDate').value;
+    var dateArray = date.split("-");
     var startHour = parseInt(document.getElementById('eventStartHour').value);
     var startMin = document.getElementById('eventStartMin').value;
     var startPeriod = document.getElementById('eventStartPeriod').value;
@@ -67,14 +68,12 @@ function addEvent() {
         endHour += 12;
     }
 
-    var startDate = new Date(date + ", " + startHour + ":" + startMin);
-    console.log(startDate);
-    var startDateEpoch = startDate.getTime() / 1000;
-    console.log(startDateEpoch);
-    var endDate = new Date(date + ", " + endHour + ":" + endMin);
-    var endDateEpoch = endDate.getTime()/1000;
+    var startDate = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]), parseInt(startHour), parseInt(startMin), 0, 0);
+    startDate = startDate.toUTCString();
+    var endDate = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]), parseInt(endHour), parseInt(endMin), 0, 0);
+    endDate = endDate.toUTCString();
     
-    if (startDateEpoch > endDateEpoch) {
+    if (startDate > endDate) {
         $('#modalDateError').show();
 
         $('.modalDate').off('click');
@@ -94,15 +93,15 @@ function addEvent() {
         });
     }
 
-    if (startDateEpoch <= endDateEpoch && title.length > 0) {
+    if (startDate <= endDate && title.length > 0) {
         $("#addEventModal").modal('hide');
 
         //send a request to the server to store the event
         var event = {
             desc: title,
             circuit_id: roomNum,
-            start_time: startDateEpoch,
-            end_time: endDateEpoch,
+            start_time: startDate,
+            end_time: endDate,
             onoff: roomState
         }
 
