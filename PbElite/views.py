@@ -328,17 +328,21 @@ def registerUser(request):
             user = User(login = login, first_name = data['firstname'], last_name = data['lastname'], email = data['email'])
             user.save()
             address = data['address']
-            rpi = RaspberryPi(
-                serial_num = rpid,
-                user = user,
-                model = 'Powerblock Elite v1',
-                city = data['city'],
-                country = data['country'],
-                street_num = re.sub("\D+", "", address),
-                street_name = re.sub ("\d",  "", address[1:]),
-                postal_code = data['postalCode']
-            )
-            return HttpResponse(content='OK')
+            try:
+                rpi = RaspberryPi.objects.get(pk = rpid)
+                return HttpResponse(content= 'Duplicate RPID')
+            except RaspberryPi.DoesNotExist:
+                rpi = RaspberryPi(
+                    serial_num = rpid,
+                    user = user,
+                    model = 'Powerblock Elite v1',
+                    city = data['city'],
+                    country = data['country'],
+                    street_num = re.sub("\D+", "", address),
+                    street_name = re.sub ("\d",  "", address[1:]),
+                    postal_code = data['postalCode']
+                )
+                return HttpResponse(content='OK')
         
 @csrf_exempt
 def deleteSchedule(request)
