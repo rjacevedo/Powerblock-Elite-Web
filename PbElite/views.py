@@ -345,7 +345,7 @@ def registerUser(request):
                 return HttpResponse(content='OK')
         
 @csrf_exempt
-def deleteSchedule(request)
+def deleteSchedule(request):
     if request.method == 'POST':
         data = request.POST
         schedule_id = data['scheduleID']
