@@ -1,14 +1,15 @@
 from djcelery.models import PeriodicTask, CrontabSchedule
 from models import Circuit
 from models import Schedule
-from datetime import datetime
+import datetime
+import json
 
 def scheduleToggleTask(circuit_id, desired_state, crontab_obj):
 	periodic_task = PeriodicTask(
 		name='%s_%s' % ('toggleSwitch', datetime.datetime.now()),
     	task='PbElite.tasks.toggleSwitch',
     	crontab=crontab_obj,
-    	args=json.dump([circuit_id, desired_state])
+    	args=json.dumps([circuit_id, desired_state])
 	)
 	periodic_task.save()
 	return periodic_task

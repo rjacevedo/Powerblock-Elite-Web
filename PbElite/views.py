@@ -13,6 +13,7 @@ from scheduler import createUserSchedule
 
 @csrf_exempt
 def test_response(request, login=None):
+    print login
     user = User.objects.get(login_id=login)
     rpi = RaspberryPi.objects.get(user=user.id)
     circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
@@ -25,7 +26,7 @@ def test_response(request, login=None):
     for circuit in circuits:
         response_data['changed'] = True
         response_data['data'].append({
-                'circuit_num': circuit.circuit_num,
+                'circuit_num': circuit.id,
                 'state': circuit.state
             })
 
@@ -222,6 +223,7 @@ def postNewEvent(request):
         """subject to change"""
         start_time = datetime.datetime.fromtimestamp(int(json_data['start_time']))
         end_time = datetime.datetime.fromtimestamp(int(json_data['end_time']))
+        print start_time
         desc = json_data['desc']
         circuit_id = json_data['circuit_id']
         onoff = json_data['onoff']

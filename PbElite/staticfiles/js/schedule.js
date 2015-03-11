@@ -52,19 +52,25 @@ function addEvent() {
     var roomDescription = roomName + " is " + roomState;
 
     var date = document.getElementById('eventDate').value;
-    var startHour = document.getElementById('eventStartHour').value;
+    var startHour = parseInt(document.getElementById('eventStartHour').value);
     var startMin = document.getElementById('eventStartMin').value;
     var startPeriod = document.getElementById('eventStartPeriod').value;
-    var endHour = document.getElementById('eventEndHour').value;
+    var endHour = parseInt(document.getElementById('eventEndHour').value);
     var endMin = document.getElementById('eventEndMin').value;
     var endPeriod = document.getElementById('eventEndPeriod').value;
 
-    if(startPeriod == 'pm') {
+    if (startPeriod == 'pm') {
         startHour += 12;
     }
 
+    if (endPeriod == 'pm') {
+        endHour += 12;
+    }
+
     var startDate = new Date(date + ", " + startHour + ":" + startMin);
+    console.log(startDate);
     var startDateEpoch = startDate.getTime() / 1000;
+    console.log(startDateEpoch);
     var endDate = new Date(date + ", " + endHour + ":" + endMin);
     var endDateEpoch = endDate.getTime()/1000;
     
@@ -106,6 +112,7 @@ function addEvent() {
             data: event,
             success: function (data) {
                 addCalendarEvent(title, startDate, endDate, roomNum);
+                console.log("event added");
             }
         });
     }
