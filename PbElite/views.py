@@ -88,9 +88,12 @@ def loginRequest(request):
             user = Login.objects.get(username=username)
         except Login.DoesNotExist:
             user = None
-        
+        print user.salt
+        rhash = None
         response_data = {}
-        if hasattr(user, 'password') and password == user.password:
+        
+        hashed_password = hashlib.sha512(password + user.salt).hexdigest()
+        if hasattr(user, 'password') and hashed_password == user.password:
             response_data['loginSuccess'] = 1
             rhash = os.urandom(16).encode('hex')
             usr = User.objects.get(login = user)
