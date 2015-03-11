@@ -67,6 +67,7 @@ function addEvent() {
         endHour += 12;
     }
 
+    console.log(date + ", " + startHour + ":" + startMin);
     var startDate = new Date(date + ", " + startHour + ":" + startMin);
     console.log(startDate);
     var startDateEpoch = startDate.getTime() / 1000;
