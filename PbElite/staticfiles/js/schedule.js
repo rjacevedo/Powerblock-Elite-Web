@@ -20,20 +20,6 @@
         }
     });
 
-    var startDate = new Date("February 2, 2015 08:00:00");
-    var endDate = new Date("February 2, 2015 15:00:00");
-
-    for (var i = 0; i < 4; i++) {
-        for (var j = 0; j < 5; j++) {
-            addCalendarEvent("Attending Lectures", startDate, endDate);
-
-            startDate.setDate(startDate.getDate() + 1);
-            endDate.setDate(endDate.getDate() + 1);
-        }
-        startDate.setDate(startDate.getDate() + 2);
-        endDate.setDate(endDate.getDate() + 2);
-    }
-
     var login = 1;
     $.getJSON("/api/getCalendarEvents/", { userID: login }, function (calendarEvents) {
         calendarEvents.forEach(function (v) {
