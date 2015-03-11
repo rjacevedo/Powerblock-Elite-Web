@@ -25,37 +25,46 @@
         <div class="container">
             <div id="mainDiv" class="jumbotron">
                 <h2>Powerblock Elite Registration</h2>
-                <div id="register">
+                <div id="register" class="panel-body row">
                     <div>
-                        <label for="registrationKey">Registration Key:</label>
-                        <input type="text" id="registrationKey" />
-                        <br />
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" />
-                        <br/>
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" >
-                        <br />
-                        <label for="email">Email:</label>
-                        <input type="text" id="email" />
-                        <br />
-                        <label for="address">Address:</label>
-                        <input type="text" id="address" />
-                        <br />
-                        <label for="city">City:</label>
-                        <input type="text" id="city" />
-                        <br />
-                        <label for="country">Country:</label>
-                        <input type="text" id="country" />
-                        <br />
-                        <label for="postalCode">Postal Code:</label>
-                        <input type="text" id="postalCode" />
-                        <br />
+                        <div class="col-xs-6">
+                            <label for="registrationKey">Registration Key:</label>
+                            <input type="text" id="registrationKey" />
+                            <br />
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" />
+                            <br/>
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" >
+                            <br />
+                            <label for="email">Email:</label>
+                            <input type="text" id="email" />
+                            <br />
+                            <label for="firstName">First Name:</label>
+                            <input type="text" id="firstName" />
+                            <br />
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" id="lastName" />
+                        </div>
+                        <div>
+                            <label for="address">Address:</label>
+                            <input type="text" id="address" />
+                            <br />
+                            <label for="city">City:</label>
+                            <input type="text" id="city" />
+                            <br />
+                            <label for="country">Country:</label>
+                            <input type="text" id="country" />
+                            <br />
+                            <label for="postalCode">Postal Code:</label>
+                            <input type="text" id="postalCode" />
+                            <br />
+                        </div>
                     </div>
-                    <div>
-                        <button type="button" class="btn btn-large btn-primary" onclick="completeRegistration()">Create Account</button>
-                        <button type="button" class="btn btn-large btn-default">Cancel</button>
-                    </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-large btn-primary" onclick="completeRegistration()">Create Account</button>
+                    <button type="button" class="btn btn-large btn-default">Cancel</button>
                 </div>
             </div>
         </div>
