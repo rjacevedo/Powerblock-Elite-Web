@@ -76,7 +76,7 @@ function addEvent() {
         $('#eventTitle').off("click");
         $('#eventTitle').click(function () {
             $('#eventTitle').attr("placeholder", "");
-            $('#eventTitle').css("border-color", "initial");
+            $('#eventTitle').css("border-color", "rgb(204, 204, 204)");
         });
     }
 
