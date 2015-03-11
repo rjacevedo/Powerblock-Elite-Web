@@ -57,7 +57,7 @@ def grabLogin(request):
 def grabRegistration(request):
     if(request.method == 'GET'):
         template = loader.render_to_string("registration.html")
-        return checkCookie(request,HttpResponse(template))
+        return HttpResponse(template)
 
 @csrf_exempt
 def grabAccount(request):
