@@ -226,9 +226,10 @@ def postNewEvent(request):
     if request.method == 'POST':
         json_data = request.POST
         """subject to change"""
-        start_time = datetime.datetime.fromtimestamp(int(json_data['start_time']))
-        end_time = datetime.datetime.fromtimestamp(int(json_data['end_time']))
+        start_time = datetime.datetime.strptime(json_data['start_time'], "%a, %d %b %Y %H:%M:%S %Z")
+        end_time = datetime.datetime.strptime(json_data['end_time'], "%a, %d %b %Y %H:%M:%S %Z")
         print start_time
+        print end_time
         desc = json_data['desc']
         circuit_id = json_data['circuit_id']
         onoff = json_data['onoff']

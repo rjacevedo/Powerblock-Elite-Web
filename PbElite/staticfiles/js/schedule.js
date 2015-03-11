@@ -56,9 +56,10 @@ function addEvent() {
 
     var startDate = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]), parseInt(startHour), parseInt(startMin), 0, 0);
     startDate = startDate.toUTCString();
+    console.log(startDate);
     var endDate = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]), parseInt(endHour), parseInt(endMin), 0, 0);
     endDate = endDate.toUTCString();
-    
+    console.log(endDate);
     if (startDate > endDate) {
         $('#modalDateError').show();
 
