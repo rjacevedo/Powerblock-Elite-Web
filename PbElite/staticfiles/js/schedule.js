@@ -55,7 +55,7 @@ function addEvent() {
     var startHour = parseInt(document.getElementById('eventStartHour').value);
     var startMin = document.getElementById('eventStartMin').value;
     var startPeriod = document.getElementById('eventStartPeriod').value;
-    var endHour = parseInt(document.getElementById('eventEndHour').value);
+    var endHour = parseInt(document.getElementById('eventEndHour').value );
     var endMin = document.getElementById('eventEndMin').value;
     var endPeriod = document.getElementById('eventEndPeriod').value;
 
