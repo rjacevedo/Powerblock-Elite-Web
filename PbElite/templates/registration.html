@@ -14,6 +14,7 @@
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.js"></script>
         <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript" src="{% static "js/registration.js" %}"></script>
         <script type="text/javascript">
             
         </script>
@@ -27,32 +28,32 @@
                 <div id="register">
                     <div>
                         <label for="registrationKey">Registration Key:</label>
-                        <input type="text" id="registrationKey" value="EG2I966TW" />
+                        <input type="text" id="registrationKey" />
                         <br />
                         <label for="username">Username:</label>
-                        <input type="text" id="username" value="Javier"/>
+                        <input type="text" id="username" />
                         <br/>
                         <label for="password">Password:</label>
-                        <input type="password" id="password" value="Ching"/>
+                        <input type="password" id="password" >
                         <br />
                         <label for="email">Email:</label>
-                        <input type="text" id="email" value="javier@uwaterloo.ca"/>
+                        <input type="text" id="email" />
                         <br />
                         <label for="address">Address:</label>
-                        <input type="text" id="address" value="123 Main Street"/>
+                        <input type="text" id="address" />
                         <br />
                         <label for="city">City:</label>
-                        <input type="text" id="city" value="Waterloo"/>
+                        <input type="text" id="city" />
                         <br />
                         <label for="country">Country:</label>
-                        <input type="text" id="country" value="Canada"/>
+                        <input type="text" id="country" />
                         <br />
                         <label for="postalCode">Postal Code:</label>
-                        <input type="text" id="postalCode" value="A2B 3C4"/>
+                        <input type="text" id="postalCode" />
                         <br />
                     </div>
                     <div>
-                        <button type="button" class="btn btn-large btn-primary">Create Account</button>
+                        <button type="button" class="btn btn-large btn-primary" onclick="completeRegistration()">Create Account</button>
                         <button type="button" class="btn btn-large btn-default">Cancel</button>
                     </div>
                 </div>

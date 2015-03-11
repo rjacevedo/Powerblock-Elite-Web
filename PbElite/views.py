@@ -57,7 +57,7 @@ def grabLogin(request):
 def grabRegistration(request):
     if(request.method == 'GET'):
         template = loader.render_to_string("registration.html")
-        return checkCookie(request,HttpResponse(template))
+        return HttpResponse(template)
 
 @csrf_exempt
 def grabAccount(request):
@@ -88,9 +88,12 @@ def loginRequest(request):
             user = Login.objects.get(username=username)
         except Login.DoesNotExist:
             user = None
-        
+        print user.salt
+        rhash = None
         response_data = {}
-        if hasattr(user, 'password') and password == user.password:
+        
+        hashed_password = hashlib.sha512(password + user.salt).hexdigest()
+        if hasattr(user, 'password') and hashed_password == user.password:
             response_data['loginSuccess'] = 1
             rhash = os.urandom(16).encode('hex')
             usr = User.objects.get(login = user)
@@ -140,7 +143,7 @@ def getReading(request):
         pi = RaspberryPi.objects.get(serial_num=json_data['serial'])
         if pi != None:
             for reading in json_data['readings']:
-                temp , useless= Circuit.objects.get_or_create(circuit_num=reading['circuit_num'],raspberry_pi=pi)
+                temp , useless= Circuit.objects.get_or_create(id=reading['circuit_num'],raspberry_pi=pi)
                 reading['circuit'] = temp.id
                 serial = ReadingSerializer(data=reading)
                 if serial.is_valid():
