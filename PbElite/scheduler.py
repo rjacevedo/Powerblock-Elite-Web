@@ -4,6 +4,29 @@ from models import Schedule
 import datetime
 import json
 
+def updateSchedule(schedule_id, start_date, end_date):
+	schedule = Schedule.objects.get(pk=schedule_id)
+	
+	start_crontab = CrontabSchedule(day_of_month=start_date.day, month_of_year=start_date.month,
+		hour=start_date.hour, minute=start_date.minute)
+	end_crontab = CrontabSchedule(day_of_month=end_date.day, month_of_year=end_date.month,
+		hour=end_date.hour, minute=end_date.minute)
+
+	start_schedule = schedule.start_id
+	end_schedule = schedule.end_id
+	
+	if start_schedule.crontab != start_crontab:
+		start_crontab.save()
+		start_schedule.crontab = start_crontab
+
+	if end_schedule.crontab != end_crontab:
+		end_crontab.save()
+		end_schedule.crontab = end_crontab
+
+	schedule.start_id = start_schedule
+	schedule.end_id = end_schedule
+	schedule.save()
+
 def scheduleToggleTask(circuit_id, desired_state, crontab_obj):
 	periodic_task = PeriodicTask(
 		name='%s_%s' % ('toggleSwitch', datetime.datetime.now()),
