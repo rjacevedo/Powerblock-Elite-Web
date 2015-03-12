@@ -14,70 +14,7 @@
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.js"></script>
         <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-        <script type="text/javascript">
-            $(window).bind('keypress', function(e) {
-                // enter is pressed
-                if (e.keyCode == 13) {
-                    loginRequest();
-                }
-            });
-
-            console.log(getCookie("username"));
-            if (getCookie("username")) {
-                window.location = "/home/";
-            }
-
-            function loginRequest() {
-                var username = document.getElementById('username').value;
-                var password = document.getElementById('password').value;
-
-                if (document.getElementById('stayLoggedIn').checked) {
-                    document.cookie = "username=" + username;
-                } else {
-                    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-                }
-
-                // remember to eventually encrypt the password before sending
-                var postData = {
-                    username: username,
-                    password: password
-                };
-                
-                makeLoginRequest(postData);
-            }
-
-            function makeLoginRequest(postData) {
-                $.ajax({
-                type: "POST",
-                url: "/loginRequest/",
-                data: postData,
-                success: function (data) {
-                    if(data.loginSuccess == 1) {
-                        if(document.getElementById('stayLoggedIn').checked) {
-                            document.cookie = 'loginsession=' + data.hash;
-                        }
-                        window.location = "/home/";
-                    } else {
-                        document.getElementById('loginError').style.display = "block";
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    console.log("error: " + errorThrown);
-                    }
-                });
-            }
-
-            function getCookie(cname) {
-                var name = cname + "=";
-                var ca = document.cookie.split(';');
-                for(i = 0; i < ca.length; i++) {
-                    var c = ca[i];
-                    while(c.charAt(0) == ' ') c = c.substring(1);
-                    if(c.indexOf(name) == 0) return c.substring(name.length, c.length);
-                }
-                return "";
-            }
-        </script>
+        <script type="text/javascript" src="{% static "js/login.js" %}"></script>
     </head>
 
     <body>
@@ -97,7 +34,7 @@
                         <span style="font-size: medium; ">Keep me logged in</span>
                     </div>
                     <div style="margin-bottom: 10px; font-size: medium;">
-                        New to Powerblock Elite? <a onclick='window.location = "/register/"'>Register here</a>
+                        New to Powerblock Elite? <a onclick='window.location = "/register/"' style="cursor: pointer">Register here</a>
                     </div>
                     <button type="button" class="btn btn-large btn-primary" onclick="loginRequest()">Submit</button>
                 </div>
