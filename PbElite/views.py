@@ -238,7 +238,7 @@ def postNewEvent(request):
                            state=onoff)
         schedule.save()
         createUserSchedule(schedule.pk, onoff)
-        return HttpResponse(content="OK")
+        return HttpResponse(schedule.id)
        
 def retrieveEvents(request):
     data = request.GET
@@ -257,8 +257,9 @@ def retrieveEvents(request):
         response_data = []
         for event in events:
             response_data.append({
-                    'start': time.mktime(event.start_time.timetuple()),
-                    'end': time.mktime(event.end_date.timetuple()),
+                    'id': event.id,
+                    'start': event.start_time.strftime('%Y-%m-%dT%H:%M:%S'),
+                    'end': event.end_date.strftime('%Y-%m-%dT%H:%M:%S'),
                     'description': event.description,
                     'circuit': event.circuit_id,
                     'state': event.state
@@ -359,17 +360,3 @@ def deleteSchedule(request):
             return HttpResponse(content='OK')
         except Schedule.DoesNotExist:
             return HttpResponse(content='Bad Schedule ID')
-
-
-
-
-
-
-
-
-
-
-
-
-
-

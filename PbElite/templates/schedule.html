@@ -75,16 +75,7 @@
                     <label>Turn</label>
                     <select id="eventRoomSelect">
                         <script type="text/javascript">
-                            //hard code for now until authentication is complete
-                            var login = 1;
-                            $.getJSON("/circuits/" + login + "/", function (circuits) {
-                                var contents = '';
-                                for (i in circuits) {
-                                    contents += '<option value="' + circuits[i].num + '">';
-                                    contents += circuits[i].name + '</option>';
-                                }
-                                document.getElementById('eventRoomSelect').innerHTML = contents;
-                            });
+                            modalGetRoomSelect();
                         </script>
                     </select>
                     <select id="eventRoomState">
@@ -104,14 +95,45 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Remove Event?</h4>
+                    <h4 class="modal-title">Edit Event</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to remove this event?</p>
+                    <label for="eventTitle">Event Title:</label>
+                    <input type="text" id="editEventTitle" required />
+                    <br/>
+                    <label>Start Time:</label>
+                    <span class="modalDate">
+                        <input type="number" id="editEventStartHour" min="0" max="11" value="0" style="width: 40px" />
+                        <input type="number" id="editEventStartMin" min="0" max="59" value="0" style="width: 40px" />
+                        <select id="editEventStartPeriod">
+                            <option value="am">AM</option>
+                            <option value="pm">PM</option>
+                        </select>
+                    </span>
+                    <br />
+                    <label>End Time:</label>
+                    <span class="modalDate">
+                        <input type="number" id="editEventEndHour" min="0" max="11" value="0" style="width: 40px" />
+                        <input type="number" id="editEventEndMin" min="0" max="59" value="0" style="width: 40px" />
+                        <select id="editEventEndPeriod">
+                            <option value="am">AM</option>
+                            <option value="pm">PM</option>
+                        </select>
+                    </span>
+                    <span id="editModalDateError" style="color: Red; display: none">End time must be greater than the start time!</span>
+                    <br />
+                    <label>Turn</label>
+                    <select id="editEventRoomSelect">
+                    </select>
+                    <select id="editEventRoomState">
+                        <option value="1">on</option>
+                        <option value="0">off</option>
+                    </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Yes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Update</button>
+                    <button id="editDeleteButton" type="button" class="btn btn-warning" data-dismiss="modal">Delete</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>

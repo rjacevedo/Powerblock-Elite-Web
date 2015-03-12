@@ -1,6 +1,6 @@
 ﻿google.load('visualization', '1.1', { packages: ['line'] });
 
-function drawChart() {
+function drawChart(circuit_num) {
     var width = document.getElementById('main').offsetWidth * 0.9;
     var height = document.getElementById('main').offsetHeight * 0.75;
 
@@ -11,7 +11,7 @@ function drawChart() {
         type: "POST",
         url: "/api/getCircuitData/",
         data: {
-            circuit_num: 1,
+            circuit_num: circuit_num,
         },
         success: function (data) {
             var contents = [];

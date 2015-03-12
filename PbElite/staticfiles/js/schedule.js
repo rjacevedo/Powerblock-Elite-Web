@@ -7,6 +7,40 @@
             $('#addEventModal').modal('show');
         },
         eventClick: function (calEvent, jsEvent, view) {
+            $('#editEventTitle').val(calEvent.title);
+
+            var startDate = new Date(calEvent.start);
+            var startHour = startDate.getHours();
+            if (startHour > 11) {
+                $('#editEventStartPeriod').val('pm');
+                startHour -= 12;
+            }
+            $('#editEventStartHour').val(startHour);
+            $('#editEventStartMin').val(startDate.getMinutes());
+
+            var endDate = new Date(calEvent.end);
+            var endHour = endDate.getHours();
+            if (endHour > 11) {
+                $('#editEventEndPeriod').val('pm');
+                endHour -= 12;
+            }
+            $('#editEventEndHour').val(endHour);
+            $('#editEventEndMin').val(endDate.getMinutes());
+
+            $('#editEventRoomSelect').val(calEvent.roomNum);
+            $('#editEventState').val(calEvent.state);
+
+            $('#editDeleteButton').one("click", function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/deleteSchedule",
+                    data: { scheduleID: calEvent.id },
+                    success: function (data) {
+                        calendar.fullCalendar('removeEvents', calEvent.id);    
+                    }
+                });
+            });
+
             $('#removeEventModal').modal('show');
         },
         height: height,
@@ -23,9 +57,9 @@
     var login = 1;
     $.getJSON("/api/getCalendarEvents/", { userID: login }, function (calendarEvents) {
         calendarEvents.forEach(function (v) {
-            var start = new Date(v.start*1000);
-            var end = new Date(v.end*1000);
-            addCalendarEvent(v.description, start, end, v.circuit);
+            var start = new Date(v.start);
+            var end = new Date(v.end);
+            addCalendarEvent(v.id, v.description, start, end, v.circuit, v.state);
         });
     });
 });
@@ -54,12 +88,10 @@ function addEvent() {
         endHour += 12;
     }
 
-    var startDate = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]), parseInt(startHour), parseInt(startMin), 0, 0);
-    startDate = startDate.toUTCString();
-    console.log(startDate);
-    var endDate = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]), parseInt(endHour), parseInt(endMin), 0, 0);
-    endDate = endDate.toUTCString();
-    console.log(endDate);
+    var startDateDefault = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]), parseInt(startHour), parseInt(startMin), 0, 0);
+    startDate = startDateDefault.toUTCString();
+    var endDateDefault = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]), parseInt(endHour), parseInt(endMin), 0, 0);
+    endDate = endDateDefault.toUTCString();
     if (startDate > endDate) {
         $('#modalDateError').show();
 
@@ -97,27 +129,50 @@ function addEvent() {
             url: "/api/newCalenderEvent/",
             data: event,
             success: function (data) {
-                addCalendarEvent(title, startDate, endDate, roomNum);
-                console.log("event added");
+                addCalendarEvent(data, title, startDateDefault, endDateDefault, roomNum);
             }
         });
     }
 }
 
-function addCalendarEvent(description, start, end, roomNum) {
+function addCalendarEvent(id, title, start, end, roomNum, state) {
     var event = {
-        title: description,
+        id: id,
+        title: title,
         roomNum: roomNum,
         start: start,
-        end: end
+        end: end,
+        state: state
     }
 
     var calendar = $('#calendar');
     calendar.fullCalendar('renderEvent', event);
 }
 
+function deleteCalendarEvent(eventId) {
+    
+}
+
 function resetModal() {
     $('#eventTitle').attr("placeholder", "");
     $('#eventTitle').css("border-color", "initial");
     $('#modalDateError').hide();
+}
+
+function modalGetRoomSelect() {
+    //hard code for now until authentication is complete
+    var login = 1;
+    $.getJSON("/circuits/" + login + "/", function (circuits) {
+        var contents = '';
+        for (i in circuits) {
+            contents += '<option value="' + circuits[i].num + '">';
+            contents += circuits[i].name + '</option>';
+        }
+        document.getElementById('eventRoomSelect').innerHTML = contents;
+        document.getElementById('editEventRoomSelect').innerHTML = contents;
+    });
+}
+
+function viewScheduledEvent() {
+    
 }
