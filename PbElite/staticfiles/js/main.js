@@ -1,36 +1,19 @@
 ﻿google.load('visualization', '1.1', { packages: ['line'] });
 
-function drawChart(circuit_num) {
+function drawChart(circuit_num, circuit_name) {
     var width = document.getElementById('main').offsetWidth * 0.9;
     var height = document.getElementById('main').offsetHeight * 0.75;
 
     var chartData = new google.visualization.DataTable();
-    chartData.addColumn('number', 'Day');
+    chartData.addColumn('date', 'Time');
     chartData.addColumn('number', 'Energy Usage');
-    $.ajax({
-        type: "POST",
-        url: "/api/getCircuitData/",
-        data: {
-            circuit_num: circuit_num,
-        },
-        success: function (data) {
-            var contents = [];
-            data.readings.forEach(function(v) {
-                contents.push([new Date(v.timestamp).getDate(), v.reading]);
-            });
-            chartData.addRows(contents);
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log("error: " + errorThrown);
-        }
-    });
-
+    
     var options = {
         legend: {
             position: "none"
         },
         chart: {
-            title: 'Energy Usage of Living Room',
+            title: 'Energy Usage of ' + circuit_name,
         },
         series: {
             0: {axis: 'Energy'},
@@ -49,10 +32,37 @@ function drawChart(circuit_num) {
             }
         }
     };
+    
+    $.ajax({
+        type: "POST",
+        url: "/api/getCircuitData/",
+        data: {
+            circuit_num: circuit_num,
+        },
+        success: function (data) {
+            var contents = [];
+            data.readings.forEach(function(v) {
+                var tempDate = new Date(v.timestamp);
+                contents.push([tempDate, v.reading]);
+            });
+            chartData.addRows(contents);
 
-    var chart = new google.charts.Line(document.getElementById('linechart_material'));
+            var chart = new google.charts.Line(document.getElementById('linechart_material'));
+            chart.draw(chartData, options);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log("error: " + errorThrown);
+        }
+    });
+}
 
-    chart.draw(chartData, options);
+function doGet() {
+    var app = UiApp.createApplication();
+    var panel = app.createVerticalPanel();
+    panel.add(app.createButton("button 1"));
+    panel.add(app.createButton("button 2"));
+    app.add(panel);
+    return app;
 }
 
 function changeVal(circuitNum) {
