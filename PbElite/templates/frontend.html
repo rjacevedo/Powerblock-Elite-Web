@@ -8,11 +8,10 @@
         <title>Powerblock Elite</title>
 
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"/>
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css" rel="stylesheet"/>
         <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}"/>
 
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.js"></script>
-        <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/bootstrap.js" %}"></script>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript" src="{% static "js/main.js" %}"></script>
     </head>
@@ -52,8 +51,8 @@
                                 contents += '<button type="button" class="btn btn-xs btn-danger btn-number">';
                                 contents += '<span class="glypicon glyphicon-minus"></span>';
                                 contents += '</button>';
-                                contents += '<span style="cursor: pointer; margin-left: 3px;">' + circuits[i].name + '</span>';
-                                contents += '<span id="display' + circuits[i].num + '"></span></td>';
+                                contents += '<span id="display' + circuits[i].num + '" style="cursor: pointer; margin-left: 3px;" onclick="drawChart(' + circuits[i].num + ', \'' + circuits[i].name + '\')">' + circuits[i].name + '</span>';
+                                contents += '</td>';
                                 contents += '<td><div class="btn-group btn-toggle" style="padding-left:20px">';
                                 contents += '<button class=' + (circuits[i].state == true ? '"btn btn-primary active"' : '"btn btn-default"') + 'onclick="changeVal(' + circuits[i].num + ')">On</button>';
                                 contents += '<button class=' + (circuits[i].state == true ? '"btn btn-default"' : '"btn btn-primary active"') + 'onclick="changeVal(' + circuits[i].num + ')">Off</button>';
@@ -67,8 +66,7 @@
                             contents += "</table>";
                             document.getElementById('sidebar').innerHTML += contents;
 
-
-
+                            $('#display1').click();
                             $('.btn-toggle').click(function () {
                                 $(this).find('.btn').toggleClass('active');
 
@@ -95,10 +93,7 @@
                     <h2> 
 		                Powerblock Elite Home
 	                </h2> 
-                    <span id="linechart_material"></span>
-                    <script type="text/javascript">
-                        drawChart(1)
-                    </script>                    
+                    <span id="linechart_material"></span>         
                 </div>
 
                 <div id="mainDiv2" class="hero-unit" style="display: none">

@@ -305,7 +305,7 @@ def getChartData(request):
     if request.method == 'POST':
         data = request.POST
         c = Circuit.objects.get(pk=data['circuit_num'])
-        earlystamp = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=7)
+        earlystamp = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=1)
         readings = Reading.objects.all().filter(circuit=c, timestamp__gte=earlystamp).order_by('timestamp')
         readingsArr = []
         for r in readings:
