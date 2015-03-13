@@ -101,3 +101,9 @@ tr.spacing > td
     position: absolute;
     padding: 3px;
 }
+
+.fc-day {
+    overflow-y = scroll;
+}
+
+
