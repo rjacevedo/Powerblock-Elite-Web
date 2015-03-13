@@ -108,8 +108,8 @@ def loginRequest(request):
 @csrf_exempt
 def updateCircuit(request, login=None, circuitNum=None, value=None):
     if(request.method == 'POST'):
-        user = User.objects.get(login_id=login)
-        rpi = RaspberryPi.objects.get(user=user.id)
+        user = getUserFromCookie(request)
+        rpi = RaspberryPi.objects.get(user.login.username)
         circuit = Circuit.objects.get(raspberry_pi=rpi.id, id=circuitNum)
 
         circuit.state = True if value=="1" else False
@@ -122,8 +122,8 @@ def updateCircuit(request, login=None, circuitNum=None, value=None):
 
 def grabCircuits(request, login=None):
     if request.method == 'GET':
-        user = User.objects.get(login_id=login)
-        rpi = RaspberryPi.objects.get(user=user.id)
+        user = getUserFromCookie(request)
+        rpi = RaspberryPi.objects.get(user.login.username)
         circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
 
         response_data = []
@@ -156,8 +156,8 @@ def getReading(request):
 @csrf_exempt
 def grabReadings(request, login=None):
     if request.method == 'GET':
-        user = User.objects.get(login_id=login)
-        rpi = RaspberryPi.objects.get(user=user.id)
+        user = getUserFromCookie(request)
+        rpi = RaspberryPi.objects.get(user.login.username)
         circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
 
         response_data = {}
@@ -186,8 +186,8 @@ def getUserData(request):
     if data['userID'] == None : 
         return HttpResponse(content="Bad User Name")
     if request.method == 'GET' :
-        user = User.objects.get(login_id = data['userID'])
-        rpi = RaspberryPi.objects.get(user = data['userID'])
+        user = getUserFromCookie(request)
+        rpi = RaspberryPi.objects.get(user.login.username)
         response_data = {}
         response_data['firstName'] = user.first_name
         response_data['lastName'] = user.last_name
@@ -204,8 +204,8 @@ def updateUserData(request):
     if(request.method == 'POST'):
         data = request.POST;
 
-        user = User.objects.get(login_id=data['userID'])
-        rpi = RaspberryPi.objects.get(user=data['userID'])
+        user = getUserFromCookie(request)
+        rpi = RaspberryPi.objects.get(user.login.username)
 
         user.first_name = data['firstName'];
         user.last_name = data['lastName'];
@@ -245,7 +245,8 @@ def retrieveEvents(request):
     if data['userID'] == None : 
         return HttpResponse(content="Bad User Name")
     if request.method == 'GET':
-        rpi = RaspberryPi.objects.get(user = data['userID'])
+        user = getUserFromCookie(request)
+        rpi = RaspberryPi.objects.get(user.login.username)
         circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
 
         circuitIDs = []
@@ -302,7 +303,7 @@ def getUserFromCookie(request):
             else:
                 return s.username
         except UserSessions.DoesNotExist:
-    return None;
+            return None
 
 @csrf_exempt
 def logout (request):
