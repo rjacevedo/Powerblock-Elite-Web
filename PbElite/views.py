@@ -302,7 +302,7 @@ def getUserFromCookie(request):
             else:
                 return s.username
         except UserSessions.DoesNotExist:
-    return None;
+            return None;
 
 @csrf_exempt
 def logout (request):
