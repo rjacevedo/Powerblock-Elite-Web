@@ -142,12 +142,8 @@ def getReading(request):
         if pi != None:
             for reading in json_data['readings']:
                 temp , useless= Circuit.objects.get_or_create(id=reading['circuit_num'],raspberry_pi=pi)
-                reading['circuit'] = temp.id
-                serial = ReadingSerializer(data=reading)
-                if serial.is_valid():
-                    serial.save()
-                else:
-                    return HttpResponse(content="Bad Reading")
+                r = Reading(circuit=temp, power=reading['power'], timestamp = datetime.datetime.now(pytz.utc))
+                r.save()
             return HttpResponse(content="OK")
         return HttpResponse(content="Specify RPi Serial Number")
 
