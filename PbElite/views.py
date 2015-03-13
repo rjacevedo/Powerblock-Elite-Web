@@ -51,7 +51,7 @@ def test_response(request, login=None):
 @csrf_exempt
 def grabLogin(request):
     if(request.method == 'GET'):
-        template = loader.render_to_string("login.html")
+        template = loader.render_to_string("index.html")
         return HttpResponse(template)
 
 def grabRegistration(request):
@@ -280,7 +280,7 @@ def setCookieResponse(response, key, value, expiry):
 
 def checkCookie(request, response):
     """ghetto it up!"""
-    template = loader.render_to_string("login.html")
+    template = loader.render_to_string("index.html")
     loginagain = HttpResponse(template)
     if request.COOKIES.has_key( 'session' ):
         sesh = request.COOKIES['session']
@@ -406,7 +406,6 @@ def deleteARoom(request):
             return HttpResponse(content='OK')
         except Schedule.DoesNotExist:
             return HttpResponse(content='Bad User ID or Circuit ID')
-
 
 
 
