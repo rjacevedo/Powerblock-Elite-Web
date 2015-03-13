@@ -15,7 +15,7 @@ import re
 
 @csrf_exempt
 def test_response(request, login=None):
-    print login
+    print "user " + login " logged in"
     user = User.objects.get(login_id=login)
     rpi = RaspberryPi.objects.get(user=user.id)
     circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
@@ -140,8 +140,7 @@ def grabCircuits(request, login=None):
 def getReading(request):
     if request.method == 'POST':
         json_data = json.loads(request.body)
-        user = getUserFromCookie(request)
-        rpi = RaspberryPi.objects.get(user=user)
+        pi = RaspberryPi.objects.get(serial_num=json_data['serial'])
         if pi != None:
             for reading in json_data['readings']:
                 temp , useless= Circuit.objects.get_or_create(id=reading['circuit_num'],raspberry_pi=pi)
