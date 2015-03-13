@@ -56,15 +56,6 @@ function drawChart(circuit_num, circuit_name) {
     });
 }
 
-function doGet() {
-    var app = UiApp.createApplication();
-    var panel = app.createVerticalPanel();
-    panel.add(app.createButton("button 1"));
-    panel.add(app.createButton("button 2"));
-    app.add(panel);
-    return app;
-}
-
 function changeVal(circuitNum) {
     var circuit = document.getElementById('circuit' + circuitNum);
     var login = 1;
@@ -80,6 +71,43 @@ function changeVal(circuitNum) {
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log("error: " + errorThrown);
+        }
+    });
+}
+
+function addNewRoom() {
+    var roomName = $('#modalNewRoom').val();
+    $.ajax({
+        type: "POST",
+        url: "/api/addARoom/",
+        data: { roomName: roomName },
+        success: function(circuitID) {
+            console.log(circuitID);
+            var contents = '<tr class="spacing">';
+            contents += '<td><span><input type="hidden" id="circuit' + circuitID + '" value="' + roomName + '" /></span>';
+            contents += '<button type="button" class="btn btn-xs btn-danger btn-number" onclick="deleteRoom('+circuitID+')">';
+            contents += '<span class="glypicon glyphicon-minus"></span>';
+            contents += '</button>';
+            contents += '<span id="display' + circuitID + '" style="cursor: pointer; margin-left: 3px;" onclick="drawChart(' + circuitID + ', \'' + roomName + '\')">' + roomName + '</span>';
+            contents += '</td>';
+            contents += '<td><div class="btn-group btn-toggle" style="padding-left:20px">';
+            contents += '<button class="btn btn-primary active" onclick="changeVal(' + circuitID + ')">On</button>';
+            contents += '<button class="btn btn-default" onclick="changeVal(' + circuitID + ')">Off</button>';
+            contents += '</div></td>';
+            contents += '</tr>';
+
+            $('.circuitList tr:last').before(contents);
+        }
+    });
+}
+
+function deleteRoom(circuitID) {
+    $.ajax({
+        type: "POST",
+        url: "/api/deleteARoom/",
+        data: { circuitID: circuitID },
+        success: function(data) {
+            $('#circuit'+circuitID).closest('tr').remove();
         }
     });
 }

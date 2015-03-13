@@ -387,7 +387,8 @@ def addARoom(request):
             rpi = RaspberryPi.objects.get(user=user)
             name = data['roomName']
             c = Circuit(raspberry_pi=rpi, circuit_name=name)
-            return HttpResponse(content='OK')
+            c.save()
+            return HttpResponse(c.id)
         except Schedule.DoesNotExist:
             return HttpResponse(content='Bad User ID')
 

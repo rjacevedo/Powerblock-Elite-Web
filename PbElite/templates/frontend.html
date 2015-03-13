@@ -37,7 +37,7 @@
         </nav>
         <div class="container-fluid">
             <div class="row-fluid">
-                <div id="sidebar" class="col-md-3">
+                <div id="sidebar" class="col-md-3" style="overflow-y: scroll">
                     <script type="text/javascript">
                         var html = '';
 
@@ -49,7 +49,7 @@
                                 contents += '<tr class="spacing">';
                                 contents += '<td><span><input type="hidden" id="circuit' + circuits[i].num + '" value="' + circuits[i].state + '" /></span>';
                                 contents += '<button type="button" class="btn btn-xs btn-danger btn-number">';
-                                contents += '<span class="glypicon glyphicon-minus"></span>';
+                                contents += '<span class="glypicon glyphicon-minus" onclick="deleteRoom(' + circuits[i].num + ')"></span>';
                                 contents += '</button>';
                                 contents += '<span id="display' + circuits[i].num + '" style="cursor: pointer; margin-left: 3px;" onclick="drawChart(' + circuits[i].num + ', \'' + circuits[i].name + '\')">' + circuits[i].name + '</span>';
                                 contents += '</td>';
@@ -59,7 +59,7 @@
                                 contents += '</div></td>';
                                 contents += '</tr>';
                             }
-                            contents += '<tr style="cursor: pointer"><td><button type="button" class="btn btn-success" style="margin-top: 10px;">';
+                            contents += '<tr style="cursor: pointer"><td><button type="button" class="btn btn-success" onclick="$(\'#addNewRoomModal\').modal(\'show\');" style="margin-top: 10px;">';
                             contents += '<span class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right: 3px;"></span>';
                             contents += 'Add a room';
                             contents += '</button></td></tr/>';
@@ -95,7 +95,24 @@
 	                </h2> 
                     <span id="linechart_material"></span>         
                 </div>
-
+                <div class="modal fade" id="addNewRoomModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Add a room</h4>
+                            </div>
+                            <div class="modal-body">
+                                <label for="modalNewRoom">Enter new room name:</label>
+                                <input type="text" id="modalNewRoom"/>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" onclick="addNewRoom()" data-dismiss="modal">Add Room</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="mainDiv2" class="hero-unit" style="display: none">
                     <script type="text/javascript">
                         var login = 1;
