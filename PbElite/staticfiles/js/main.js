@@ -1,9 +1,15 @@
 ﻿google.load('visualization', '1.1', { packages: ['line'] });
 
+
+var currentnum = -1;
+var currentname = "";
 function drawChart(circuit_num, circuit_name) {
     var width = document.getElementById('main').offsetWidth * 0.9;
     var height = document.getElementById('main').offsetHeight * 0.75;
-
+    if (!circuit_num || !circuit_name) {
+        circuit_num = currentnum;
+        circuit_name = currentname;
+    }
     var chartData = new google.visualization.DataTable();
     chartData.addColumn('date', 'Time');
     chartData.addColumn('number', 'Energy Usage');
@@ -49,12 +55,16 @@ function drawChart(circuit_num, circuit_name) {
 
             var chart = new google.charts.Line(document.getElementById('linechart_material'));
             chart.draw(chartData, options);
+            currentname = circuit_name;
+            currentnum = circuit_num;
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log("error: " + errorThrown);
         }
     });
 }
+
+setInterval(function(){ drawChart(); }, 3000);
 
 function changeVal(circuitNum) {
     var circuit = document.getElementById('circuit' + circuitNum);

@@ -120,20 +120,22 @@ def updateCircuit(request, login=None, circuitNum=None, value=None):
 
 def grabCircuits(request, login=None):
     if request.method == 'GET':
-        user = getUserFromCookie(request)
-        rpi = RaspberryPi.objects.get(user=user)
-        circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
+        try:
+            user = getUserFromCookie(request)
+            rpi = RaspberryPi.objects.get(user=user)
+            circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
 
-        response_data = []
+            response_data = []
 
-        for circuit in circuits:
-            response_data.append({
-                    "num": circuit.id,
-                    "name": circuit.circuit_name,
-                    "state": circuit.state
-                })
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
-
+            for circuit in circuits:
+                response_data.append({
+                        "num": circuit.id,
+                        "name": circuit.circuit_name,
+                        "state": circuit.state
+                    })
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        except:
+            return HttpResponse(content="fail")
 @csrf_exempt
 def getReading(request):
     if request.method == 'POST':
@@ -150,30 +152,33 @@ def getReading(request):
 @csrf_exempt
 def grabReadings(request, login=None):
     if request.method == 'GET':
-        user = getUserFromCookie(request)
-        rpi = RaspberryPi.objects.get(user=user)
+        try:
+            user = getUserFromCookie(request)
+            rpi = RaspberryPi.objects.get(user=user)
 
-        circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
+            circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
 
-        response_data = {}
+            response_data = {}
 
-        for circuit in circuits:
-            reading = Reading.objects.filter(circuit_id=circuit.id).order_by("-timestamp")[:1]
-            if len(reading) == 0:
-                continue;
-            #response_data[circuit.id] = []
-            '''for reading in readings:
-                response_data[circuit.id].append({
-                        "reading_id": reading.id,
-                        "power": reading.power,
-                        "timestamp": str(reading.timestamp)
-                    })'''
-            response_data[circuit.id] = {
-                    "name": circuit.circuit_name,
-                    "power": reading[0].power,
-                    "timestamp": str(reading[0].timestamp)
-                }
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+            for circuit in circuits:
+                reading = Reading.objects.filter(circuit_id=circuit.id).order_by("-timestamp")[:1]
+                if len(reading) == 0:
+                    continue;
+                #response_data[circuit.id] = []
+                '''for reading in readings:
+                    response_data[circuit.id].append({
+                            "reading_id": reading.id,
+                            "power": reading.power,
+                            "timestamp": str(reading.timestamp)
+                        })'''
+                response_data[circuit.id] = {
+                        "name": circuit.circuit_name,
+                        "power": reading[0].power,
+                        "timestamp": str(reading[0].timestamp)
+                    }
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        except:
+            return HttpResponse(content = 'whoops')
 
 def getUserData(request):
     data = request.GET;
@@ -313,16 +318,19 @@ def logout (request):
 def getChartData(request):
     if request.method == 'POST':
         data = request.POST
-        c = Circuit.objects.get(pk=data['circuit_num'])
-        earlystamp = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=0.5)
-        readings = Reading.objects.all().filter(circuit=c, timestamp__gte=earlystamp).order_by('timestamp')
-        readingsArr = []
-        for r in readings:
-            readingsArr.append({'timestamp': time.mktime(r.timestamp.timetuple())*1000, 'reading': r.power})
-        response_data = {}
-        response_data['circuit_name'] = c.circuit_name
-        response_data['readings'] = readingsArr
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        try:
+            c = Circuit.objects.get(pk=data['circuit_num'])
+            earlystamp = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=0.5)
+            readings = Reading.objects.all().filter(circuit=c, timestamp__gte=earlystamp).order_by('timestamp')
+            readingsArr = []
+            for r in readings:
+                readingsArr.append({'timestamp': time.mktime(r.timestamp.timetuple())*1000, 'reading': r.power})
+            response_data = {}
+            response_data['circuit_name'] = c.circuit_name
+            response_data['readings'] = readingsArr
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+        except Circuit.DoesNotExist:
+            return HttpResponse(content='No Circuits')
 
 @csrf_exempt
 def registerUser(request):
@@ -393,7 +401,7 @@ def deleteARoom(request):
             user = getUserFromCookie(request)
             rpi = RaspberryPi.objects.get(user=user)
             cid = data['circuitID']
-            c = Circuit.objects.get(pk = cid, raspberry_pi=rpi)
+            c = Circuit.objects.get(pk = cid)
             if (c != None):
                 c.delete()
             return HttpResponse(content='OK')
