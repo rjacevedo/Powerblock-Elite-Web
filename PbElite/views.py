@@ -14,11 +14,9 @@ import uuid
 import re
 
 @csrf_exempt
-def test_response(request, login=None):
-    print "user " + login " logged in"
-    user = User.objects.get(login_id=login)
-    rpi = RaspberryPi.objects.get(user=user.id)
-    circuits = Circuit.objects.all().filter(raspberry_pi=rpi.id)
+def test_response(request, rpid=None):
+    rpi = RaspberryPi.objects.get(serial_num=rpid)
+    circuits = Circuit.objects.all().filter(raspberry_pi=rpi)
 
     response_data = {
             'changed': False,
@@ -320,7 +318,7 @@ def getChartData(request):
     if request.method == 'POST':
         data = request.POST
         c = Circuit.objects.get(pk=data['circuit_num'])
-        earlystamp = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=1)
+        earlystamp = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=0.5)
         readings = Reading.objects.all().filter(circuit=c, timestamp__gte=earlystamp).order_by('timestamp')
         readingsArr = []
         for r in readings:
