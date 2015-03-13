@@ -307,6 +307,7 @@ def getUserFromCookie(request):
         except UserSessions.DoesNotExist:
             return None
 
+
 @csrf_exempt
 def logout (request):
     if request.COOKIES.has_key('session'):
