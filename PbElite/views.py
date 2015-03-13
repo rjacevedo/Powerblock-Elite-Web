@@ -399,8 +399,9 @@ def deleteARoom(request):
             user = getUserFromCookie(request)
             rpi = RaspberryPi.objects.get(user=user)
             cid = data['circuitID']
-            c = Circuit.objects.get(pk = cid)
-            c.delete();
+            c = Circuit.objects.get(pk = cid, raspberry_pi=rpi)
+            if (c != None):
+                c.delete()
             return HttpResponse(content='OK')
         except Schedule.DoesNotExist:
             return HttpResponse(content='Bad User ID or Circuit ID')
