@@ -292,6 +292,18 @@ def checkCookie(request, response):
             return loginagain
     return loginagain
 
+def getUserFromCookie(request):
+    if request.COOKIES.has_key( 'session' ):
+        sesh = request.COOKIES['session']
+        try:
+            s = UserSessions.objects.get(randomhash = sesh)
+            if datetime.datetime.now(pytz.utc) > s.expiry_datetime:
+                s.delete()
+            else:
+                return s.username
+        except UserSessions.DoesNotExist:
+    return None;
+
 @csrf_exempt
 def logout (request):
     if request.COOKIES.has_key('session'):
@@ -360,3 +372,35 @@ def deleteSchedule(request):
             return HttpResponse(content='OK')
         except Schedule.DoesNotExist:
             return HttpResponse(content='Bad Schedule ID')
+
+@csrf_exempt
+def addARoom(request):
+    if request.method == 'POST':
+        data = request.POST
+        try:
+            user = getUserFromCookie(request)
+            rpi = RaspberryPi.objects.get(user.login.username)
+            name = data['roomName']
+            c = Circuit(raspberry_pi=rpi, circuit_name=name)
+            return HttpResponse(content='OK')
+        except Schedule.DoesNotExist:
+            return HttpResponse(content='Bad User ID')
+
+@csrf_exempt
+def deleteARoom(request):
+    if request.method == 'POST':
+        data = request.POST
+        try:
+            user = getUserFromCookie(request)
+            rpi = RaspberryPi.objects.get(user.login.username)
+            cid = data['circuitID']
+            c = Circuit.objects.get(pk = cid)
+            c.delete();
+            return HttpResponse(content='OK')
+        except Schedule.DoesNotExist:
+            return HttpResponse(content='Bad User ID or Circuit ID')
+
+
+
+
+
