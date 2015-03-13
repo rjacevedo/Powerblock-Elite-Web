@@ -27,8 +27,44 @@
             $('#editEventEndHour').val(endHour);
             $('#editEventEndMin').val(endDate.getMinutes());
 
-            $('#editEventRoomSelect').val(calEvent.roomNum);
-            $('#editEventState').val(calEvent.state);
+            $('#editUpdateButton').one("click", function () {
+                /*var roomNum = document.getElementById('eventRoomSelect').value;
+                var roomState = document.getElementById('eventRoomState').value;
+                var roomName = $("#eventRoomSelect option:selected").text();
+                var roomDescription = roomName + " is " + roomState;
+
+                var date = document.getElementById('eventDate').value;
+                var dateArray = date.split("-");
+                var startHour = parseInt(document.getElementById('eventStartHour').value);
+                var startMin = document.getElementById('eventStartMin').value;
+                var startPeriod = document.getElementById('eventStartPeriod').value;
+                var endHour = parseInt(document.getElementById('eventEndHour').value);
+                var endMin = document.getElementById('eventEndMin').value;
+                var endPeriod = document.getElementById('eventEndPeriod').value;
+
+                console.log(new Date(calEvent.start));
+
+                if (startPeriod == 'pm') {
+                    startHour += 12;
+                }
+
+                if (endPeriod == 'pm') {
+                    endHour += 12;
+                }
+
+                var startDateDefault = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]), parseInt(startHour), parseInt(startMin), 0, 0);
+                startDate = startDateDefault.toUTCString();
+                var endDateDefault = new Date(parseInt(dateArray[0]), parseInt(dateArray[1]) - 1, parseInt(dateArray[2]), parseInt(endHour), parseInt(endMin), 0, 0);
+                endDate = endDateDefault.toUTCString();
+                /*$.ajax({
+                type: "POST",
+                url: "/api/updateSchedule/",
+                data: { scheduleID: calEvent.id, start_time: calEvent },
+                success: function (data) {
+                calendar.fullCalendar('removeEvents', calEvent.id);
+                }
+                });*/
+            });
 
             $('#editDeleteButton').one("click", function () {
                 $.ajax({
@@ -36,7 +72,7 @@
                     url: "/api/deleteSchedule",
                     data: { scheduleID: calEvent.id },
                     success: function (data) {
-                        calendar.fullCalendar('removeEvents', calEvent.id);    
+                        calendar.fullCalendar('removeEvents', calEvent.id);
                     }
                 });
             });
@@ -147,10 +183,6 @@ function addCalendarEvent(id, title, start, end, roomNum, state) {
 
     var calendar = $('#calendar');
     calendar.fullCalendar('renderEvent', event);
-}
-
-function deleteCalendarEvent(eventId) {
-    
 }
 
 function resetModal() {

@@ -122,15 +122,15 @@
                     <span id="editModalDateError" style="color: Red; display: none">End time must be greater than the start time!</span>
                     <br />
                     <label>Turn</label>
-                    <select id="editEventRoomSelect">
+                    <select id="editEventRoomSelect" disabled>
                     </select>
-                    <select id="editEventRoomState">
+                    <select id="editEventRoomState" disabled>
                         <option value="1">on</option>
                         <option value="0">off</option>
                     </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Update</button>
+                    <button id="editUpdateButton" type="button" class="btn btn-primary" data-dismiss="modal" >Update</button>
                     <button id="editDeleteButton" type="button" class="btn btn-warning" data-dismiss="modal">Delete</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>

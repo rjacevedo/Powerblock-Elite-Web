@@ -102,7 +102,7 @@ function completeRegistration() {
                 postalCode: $("#postalCode").val(),
             },
             success: function (data) {           
-                console.log(data);
+                window.location = "/login/";
             }
         });
     }
