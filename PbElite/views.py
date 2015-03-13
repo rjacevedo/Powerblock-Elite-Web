@@ -406,6 +406,12 @@ def deleteARoom(request):
         except Schedule.DoesNotExist:
             return HttpResponse(content='Bad User ID or Circuit ID')
 
+@csrf_exempt
+def updateSchedule(request):
+    if request.method == 'POST':
+        data = request.POST
+        updateSchedule(data['scheduleID'], data['start_date'], data['end_date']);
+        return HttpResponse(content='OK')
 
 
 
