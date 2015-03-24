@@ -4,26 +4,26 @@
 		"pk": 1,
 		"fields": {
 			"username": "javier",
-			"password": "javier1",
-			"salt": "saltyjavier"
+			"password": "265ae8a9679dcfa6e649a39a3e36d7b5c6c4f65c435989d14bd30d2a85bedb728a15dbacae8cc6dc27127beb3be786456ba6bc5a32472dc2b1f8052a555a8ce6",
+			"salt": "367e9ef0e5f1491b95cd27dd29135714"
 		}
 	},
 	{
 		"model": "PbElite.Login",
 		"pk": 2,
 		"fields": {
-			"username": "raul",
-			"password": "raul1",
-			"salt": "saltyraul"
+			"username": "test",
+			"password": "16eceb5dcf529946c237fe28f2260bca090fe1dca62c51996e3196dac8c7c9d006c04885d1a050b25cf10319c17968fc2016d7995773f0157be709c88532b209",
+			"salt": "923491957dfd4d11836cb377b61baecd"
 		}
 	},
 	{
 		"model": "PbElite.Login",
 		"pk": 3,
 		"fields": {
-			"username": "andy",
-			"password": "andy1",
-			"salt": "saltyandy"
+			"username": "testaccount",
+			"password": "cb576e8c580d6f0fbe0c983ae0edff86592834e2d35d4bb520622ccb7d260fcb7045cb7e528e33d779dacd2acfe4181f106f60631eeac922a796a46b2292d7ae",
+			"salt": "ac3cf0a6673649de82f0af7e56559062"
 		}
 	},
 
@@ -42,9 +42,9 @@
 		"pk": 2,
 		"fields": {
 			"login": 2,
-			"first_name": "raul",
-			"last_name": "acevedo",
-			"email": "raul@waterloo.ca"
+			"first_name": "test",
+			"last_name": "test",
+			"email": "test@waterloo.ca"
 		}
 	},
 	{
@@ -52,9 +52,9 @@
 		"pk": 3,
 		"fields": {
 			"login": 3,
-			"first_name": "andy",
-			"last_name": "zhang",
-			"email": "andy@waterloo.ca"
+			"first_name": "testaccount",
+			"last_name": "testaccount",
+			"email": "testaccount@waterloo.ca"
 		}
 	},
 
@@ -76,7 +76,7 @@
 		"model": "PbElite.RaspberryPi",
 		"pk": 2,
 		"fields": {
-			"serial_num": "rpiraul",
+			"serial_num": "rpitest",
 			"user": 2,
 			"model": "rpi",
 			"street_num": "303",
@@ -90,7 +90,7 @@
 		"model": "PbElite.RaspberryPi",
 		"pk": 3,
 		"fields": {
-			"serial_num": "rpiandy",
+			"serial_num": "rpitestaccount",
 			"user": 3,
 			"model": "rpi",
 			"street_num": "123",
@@ -116,7 +116,7 @@
 		"pk": 2,
 		"fields": {
 			"raspberry_pi": 2,
-			"circuit_name": "raul's room",
+			"circuit_name": "test's room",
 			"state": true,
 			"changed": false
 		}
@@ -126,7 +126,7 @@
 		"pk": 3,
 		"fields": {
 			"raspberry_pi": 3,
-			"circuit_name": "andy's room",
+			"circuit_name": "testaccount's room",
 			"state": true,
 			"changed": false
 		}
@@ -151,23 +151,64 @@
 			"changed": false
 		}
 	},
-
 	{
-		"model": "PbElite.Reading",
-		"pk": 1,
+		"model": "PbElite.Circuit",
+		"pk": 6,
 		"fields": {
-			"circuit": 1,
-            "power" : 1,
-			"timestamp": "2014-07-18T21:20:30-05:00"
+			"raspberry_pi": 1, 
+			"circuit_name": "Garage",
+			"state": false,
+			"changed": false
 		}
 	},
 	{
-		"model": "PbElite.Reading",
-		"pk": 2,
+		"model": "PbElite.Circuit",
+		"pk": 7,
 		"fields": {
-			"circuit": 4,
-			"power": 123,
-			"timestamp": "2015-02-01T12:30:30-01:00"
+			"raspberry_pi": 1, 
+			"circuit_name": "Kitchen",
+			"state": false,
+			"changed": false
+		}
+	},
+	{
+		"model": "PbElite.Circuit",
+		"pk": 8,
+		"fields": {
+			"raspberry_pi": 1, 
+			"circuit_name": "Dining Room",
+			"state": false,
+			"changed": false
+		}
+	},
+	{
+		"model": "PbElite.Circuit",
+		"pk": 9,
+		"fields": {
+			"raspberry_pi": 1, 
+			"circuit_name": "Games Room",
+			"state": false,
+			"changed": false
+		}
+	},
+	{
+		"model": "PbElite.Circuit",
+		"pk": 10,
+		"fields": {
+			"raspberry_pi": 1, 
+			"circuit_name": "Basement",
+			"state": false,
+			"changed": false
+		}
+	},
+	{
+		"model": "PbElite.Circuit",
+		"pk": 11,
+		"fields": {
+			"raspberry_pi": 1, 
+			"circuit_name": "Guest Bedroom",
+			"state": false,
+			"changed": false
 		}
 	}
 ]
