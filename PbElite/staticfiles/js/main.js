@@ -47,11 +47,13 @@ function drawChart(circuit_num, circuit_name) {
         },
         success: function (data) {
             var contents = [];
-            data.readings.forEach(function(v) {
-                var tempDate = new Date(v.timestamp);
-                contents.push([tempDate, v.reading]);
-            });
-            chartData.addRows(contents);
+            if(data != "No Circuits"){
+                data.readings.forEach(function(v) {
+                    var tempDate = new Date(v.timestamp);
+                    contents.push([tempDate, v.reading]);
+                });
+                chartData.addRows(contents);
+            }
 
             var chart = new google.charts.Line(document.getElementById('linechart_material'));
             chart.draw(chartData, options);
