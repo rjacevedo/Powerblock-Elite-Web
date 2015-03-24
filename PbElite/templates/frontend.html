@@ -42,8 +42,7 @@
                         var html = '';
 
                         //hard code for now until authentication is complete
-                        var login = 1;
-                        $.getJSON("/circuits/" + login + "/", function (circuits) {
+                        $.getJSON("/circuits/", function (circuits) {
                             var contents = '<table style="display: inline-block; vertical-align: top" class="circuitList">';
                             for (i in circuits) {
                                 contents += '<tr class="spacing">';
@@ -115,8 +114,7 @@
                 </div>
                 <div id="mainDiv2" class="hero-unit" style="display: none">
                     <script type="text/javascript">
-                        var login = 1;
-                        $.getJSON("/api/grabReadings/" + login + "/", function (circuits) {
+                        $.getJSON("/api/grabReadings/", function (circuits) {
                             var contents = '<h2>Circuit Readings</h2>';
                             contents += '<table>';
                             contents += '<tr><th style="padding-right: 75px">Circuit Name</th><th style="padding-right: 75px">Power</th><th style="padding-right: 75px">Timestamp</th>';

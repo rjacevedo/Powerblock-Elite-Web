@@ -73,7 +73,7 @@ function changeVal(circuitNum) {
     var login = 1;
     $.ajax({
         type: "POST",
-        url: "/updateCircuit/" + login + "/" + circuitNum + "/" + (circuit.value == "true" ? "0" : "1") + "/",
+        url: "/updateCircuit/" + circuitNum + "/" + (circuit.value == "true" ? "0" : "1") + "/",
         success: function (data) {
             if (data['result'] == "0") {
                 circuit.value = "false";
